@@ -81,9 +81,7 @@ class AuthHandler {
       final user = await _findOrCreateUser(oauthData, AuthProvider.google);
 
       return _issueTokensAndRedirect(user);
-    } catch (e, st) {
-      // ignore: avoid_print
-      print('Google callback error: $e\n$st');
+    } catch (_) {
       return _handleErrorRedirect('Authentication failed');
     }
   }
