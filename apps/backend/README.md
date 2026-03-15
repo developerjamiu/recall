@@ -1,6 +1,6 @@
 # Recall Backend
 
-A Dart Frog API server that powers the Recall notes application, showcasing Globe DB integration, OAuth authentication, and RESTful API design.
+A Dart Frog API server that powers the Recall notes application, showcasing PostgreSQL integration, OAuth authentication, and RESTful API design.
 
 ## 🏗️ Architecture
 
@@ -86,10 +86,10 @@ The API will be available at `http://localhost:8080`
 
 ### OAuth Setup
 
-For detailed OAuth setup instructions, refer to the Globe documentation:
+For detailed OAuth setup instructions, refer to the provider documentation:
 
-- **[GitHub OAuth Setup Guide](https://docs.globe.dev/guides/sign-in-with-github#step-1-configure-your-github-oauth-app)**
-- **[Google OAuth Setup Guide](https://docs.globe.dev/guides/sign-in-with-google#step-1-configure-your-google-cloud-credentials)**
+- **[GitHub OAuth Docs](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app)**
+- **[Google OAuth Docs](https://developers.google.com/identity/protocols/oauth2)**
 
 #### Quick Setup Summary
 
@@ -109,7 +109,7 @@ For detailed OAuth setup instructions, refer to the Globe documentation:
 
 ## 📊 Database
 
-The backend uses [Drift](https://drift.simonbinder.eu/) as an ORM with SQLite for local development and Globe DB for production.
+The backend uses [Jao](https://pub.dev/packages/jao) as an ORM with PostgreSQL for both local development and production.
 
 ### Schema
 
@@ -235,9 +235,9 @@ dart_frog build
 dart run build/bin/server.dart
 ```
 
-### Globe Platform Deployment
+### Production Deployment
 
-The backend is deployed on Globe Platform at `https://recall-api.globeapp.dev`
+The backend can be deployed to any platform that supports Dart server applications.
 
 ## 🔒 Security
 

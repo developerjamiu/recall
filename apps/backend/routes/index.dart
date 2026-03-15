@@ -1,5 +1,5 @@
 import 'package:backend/utils/app_response.dart';
-import 'package:backend/utils/response_body.dart';
+import 'package:common/utils/response_body.dart';
 import 'package:dart_frog/dart_frog.dart';
 
 Response onRequest(RequestContext context) {

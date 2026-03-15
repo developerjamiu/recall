@@ -1,16 +1,15 @@
-import 'package:backend/repositories/drift_notes_repository.dart';
 import 'package:backend/utils/app_response.dart';
-import 'package:backend/utils/response_body.dart';
 import 'package:common/dtos/create_note_params.dart';
 import 'package:common/dtos/update_note_params.dart';
-
+import 'package:common/utils/response_body.dart';
 import 'package:dart_frog/dart_frog.dart';
+import 'package:recall_data/recall_data.dart';
 
 class NotesHandler {
-  const NotesHandler({required DriftNotesRepository notesRepository})
+  const NotesHandler({required NotesRepository notesRepository})
       : _notesRepository = notesRepository;
 
-  final DriftNotesRepository _notesRepository;
+  final NotesRepository _notesRepository;
 
   Future<Response> createNote(Request request, String userId) async {
     try {
@@ -37,9 +36,12 @@ class NotesHandler {
           data: note,
         ),
       );
-    } catch (e) {
+    } catch (_) {
       return AppResponse.internalServerError(
-        ResponseBody(success: false, message: e.toString()),
+        const ResponseBody(
+          success: false,
+          message: 'An unexpected error occurred',
+        ),
       );
     }
   }
@@ -55,9 +57,12 @@ class NotesHandler {
           data: notes,
         ),
       );
-    } catch (e) {
+    } catch (_) {
       return AppResponse.internalServerError(
-        ResponseBody(success: false, message: e.toString()),
+        const ResponseBody(
+          success: false,
+          message: 'An unexpected error occurred',
+        ),
       );
     }
   }
@@ -83,9 +88,12 @@ class NotesHandler {
           data: note,
         ),
       );
-    } catch (e) {
+    } catch (_) {
       return AppResponse.internalServerError(
-        ResponseBody(success: false, message: e.toString()),
+        const ResponseBody(
+          success: false,
+          message: 'An unexpected error occurred',
+        ),
       );
     }
   }
@@ -124,9 +132,12 @@ class NotesHandler {
           data: note,
         ),
       );
-    } catch (e) {
+    } catch (_) {
       return AppResponse.internalServerError(
-        ResponseBody(success: false, message: e.toString()),
+        const ResponseBody(
+          success: false,
+          message: 'An unexpected error occurred',
+        ),
       );
     }
   }
@@ -146,9 +157,12 @@ class NotesHandler {
           data: {'id': id},
         ),
       );
-    } catch (e) {
+    } catch (_) {
       return AppResponse.internalServerError(
-        ResponseBody(success: false, message: e.toString()),
+        const ResponseBody(
+          success: false,
+          message: 'An unexpected error occurred',
+        ),
       );
     }
   }

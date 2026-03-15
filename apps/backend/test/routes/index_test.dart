@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dart_frog/dart_frog.dart';
@@ -10,14 +11,15 @@ class _MockRequestContext extends Mock implements RequestContext {}
 
 void main() {
   group('GET /', () {
-    test('responds with a 200 and "Welcome to Dart Frog!".', () {
+    test('responds with a 200 and service info JSON', () async {
       final context = _MockRequestContext();
       final response = route.onRequest(context);
+
       expect(response.statusCode, equals(HttpStatus.ok));
-      expect(
-        response.body(),
-        completion(equals('Welcome to Dart Frog!')),
-      );
+
+      final body = jsonDecode(await response.body()) as Map<String, dynamic>;
+      expect(body['success'], isTrue);
+      expect(body['data'], containsPair('service', 'recall-api'));
     });
   });
 }

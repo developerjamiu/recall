@@ -1,31 +1,34 @@
-import 'package:backend/database/database.dart';
 import 'package:backend/handlers/auth_handler.dart';
-import 'package:backend/repositories/drift_notes_repository.dart';
-import 'package:backend/repositories/drift_user_repository.dart';
-import 'package:backend/services/jwt_service.dart';
-import 'package:backend/services/oauth_service.dart';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:http/http.dart';
+import 'package:recall_data/recall_data.dart';
 
 Handler middleware(Handler handler) {
   return handler
       .use(
         provider<AuthHandler>(
           (context) => AuthHandler(
-            userRepository: context.read<DriftUserRepository>(),
+            userRepository: context.read<UserRepository>(),
             oauthService: context.read<OAuthService>(),
             jwtService: context.read<JwtService>(),
+            refreshTokenRepository:
+                context.read<RefreshTokenRepository>(),
           ),
         ),
       )
       .use(
-        provider<DriftUserRepository>(
-          (context) => DriftUserRepository(context.read<AppDatabase>()),
+        provider<UserRepository>(
+          (context) => const JaoUserRepository(),
         ),
       )
       .use(
-        provider<DriftNotesRepository>(
-          (context) => DriftNotesRepository(context.read<AppDatabase>()),
+        provider<NotesRepository>(
+          (context) => const JaoNotesRepository(),
+        ),
+      )
+      .use(
+        provider<RefreshTokenRepository>(
+          (context) => const JaoRefreshTokenRepository(),
         ),
       )
       .use(
