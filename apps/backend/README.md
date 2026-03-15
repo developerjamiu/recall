@@ -1,338 +1,228 @@
-# Recall Backend
+# Recall Backend (Dart Frog)
 
-A Dart Frog API server that powers the Recall notes application, showcasing PostgreSQL integration, OAuth authentication, and RESTful API design.
+A [Dart Frog](https://dartfrog.vgv.dev/) API server that powers the Recall notes application. Uses file-based routing, PostgreSQL via [Jao ORM](https://pub.dev/packages/jao), OAuth 2.0 authentication, JWT-based authorization, and refresh token rotation.
 
-## 🏗️ Architecture
-
-The backend is built with [Dart Frog](https://dartfrog.vgv.dev/), a modern web framework for Dart, and uses the following architecture:
-
-```
-backend/
-├── lib/
-│   ├── config/           # Environment configuration
-│   ├── database/         # Drift database setup
-│   ├── handlers/         # Request handlers
-│   ├── repositories/     # Data access layer
-│   ├── services/         # Business logic
-│   └── utils/            # Utility functions
-├── routes/               # API routes
-└── test/                 # Tests
-```
-
-## 🚀 Quick Start
-
-### Prerequisites
+## Prerequisites
 
 - [Dart SDK](https://dart.dev/get-dart) ^3.9.2
 - [Dart Frog CLI](https://dartfrog.vgv.dev/docs/getting-started/installation)
+- [Docker](https://docs.docker.com/get-docker/) (for PostgreSQL)
 
-### 1. Install Dependencies
+## Getting Started
+
+### 1. Start PostgreSQL
+
+From the project root:
 
 ```bash
-dart pub get
+docker compose up -d
 ```
+
+This starts a PostgreSQL 16 instance on port 5432 with database `recall_dev`.
 
 ### 2. Set Up Environment Variables
 
-Create a `.env` file in the `apps/backend/` directory:
-
-```env
-# Server Configuration
-BASE_URL=http://localhost:8080
-CLIENT_URL=http://localhost:3000
-
-# OAuth Configuration
-GITHUB_CLIENT_ID=your_github_client_id
-GITHUB_CLIENT_SECRET=your_github_client_secret
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
-
-# JWT Configuration
-JWT_SECRET=your_jwt_secret_key
+```bash
+cp env.example .env
 ```
 
-### 3. Generate Database Code
+Fill in your OAuth credentials and JWT secret. See [env.example](env.example) for all required variables.
+
+### 3. Run Migrations
+
+From `packages/recall_data/`:
 
 ```bash
-dart run build_runner build
+dart run bin/migrate.dart
 ```
 
 ### 4. Run the Server
 
 ```bash
-# Development mode with hot reload
+# Development (hot reload)
 dart_frog dev
 
-# Production mode
+# Production
 dart_frog build
 dart run build/bin/server.dart
 ```
 
-The API will be available at `http://localhost:8080`
+The API runs on `http://localhost:8080` by default.
 
-## 🔧 Configuration
+## Project Structure
 
-### Environment Variables
+```
+apps/backend/
+├── lib/
+│   ├── handlers/
+│   │   ├── auth_handler.dart       # OAuth flow, refresh, logout, current user
+│   │   └── notes_handler.dart      # Notes CRUD operations
+│   ├── middleware/
+│   │   └── rate_limiter.dart       # In-memory rate limiting (10 req/min per IP)
+│   └── utils/
+│       └── app_response.dart       # Standardized JSON response helpers
+├── routes/
+│   ├── _middleware.dart             # Root: provides repositories, services, handlers
+│   ├── index.dart                   # GET / health check
+│   ├── auth/
+│   │   ├── _middleware.dart         # Applies rate limiter to auth routes
+│   │   ├── google/
+│   │   │   ├── index.dart           # GET /auth/google
+│   │   │   └── callback/index.dart  # GET /auth/google/callback
+│   │   ├── github/
+│   │   │   ├── index.dart           # GET /auth/github
+│   │   │   └── callback/index.dart  # GET /auth/github/callback
+│   │   ├── refresh/index.dart       # POST /auth/refresh
+│   │   └── logout/index.dart        # POST /auth/logout
+│   └── api/
+│       ├── _middleware.dart         # JWT bearer authentication
+│       ├── me/index.dart            # GET /api/me
+│       └── notes/
+│           ├── _middleware.dart     # Provides NotesHandler
+│           ├── index.dart           # GET, POST /api/notes
+│           └── [id].dart            # GET, PATCH, DELETE /api/notes/:id
+└── test/
+    └── routes/
+        └── index_test.dart
+```
+
+## Environment Variables
 
 | Variable | Description | Required |
 |----------|-------------|----------|
-| `BASE_URL` | Backend server URL | Yes |
-| `CLIENT_URL` | Frontend client URL | Yes |
-| `GITHUB_CLIENT_ID` | GitHub OAuth client ID | Yes |
-| `GITHUB_CLIENT_SECRET` | GitHub OAuth client secret | Yes |
+| `BASE_URL` | Backend server URL (e.g. `http://localhost:8080`) | Yes |
+| `CLIENT_URL` | Frontend URL for OAuth redirects (e.g. `http://localhost:3000`) | Yes |
+| `DATABASE_HOST` | PostgreSQL host | Yes |
+| `DATABASE_PORT` | PostgreSQL port | Yes |
+| `DATABASE_NAME` | PostgreSQL database name | Yes |
+| `DATABASE_USER` | PostgreSQL username | Yes |
+| `DATABASE_PASSWORD` | PostgreSQL password | Yes |
+| `GITHUB_CLIENT_ID` | GitHub OAuth app client ID | Yes |
+| `GITHUB_CLIENT_SECRET` | GitHub OAuth app client secret | Yes |
 | `GOOGLE_CLIENT_ID` | Google OAuth client ID | Yes |
 | `GOOGLE_CLIENT_SECRET` | Google OAuth client secret | Yes |
-| `JWT_SECRET` | JWT signing secret | Yes |
+| `JWT_SECRET` | Secret key for signing JWTs | Yes |
 
-### OAuth Setup
+## API Routes
 
-For detailed OAuth setup instructions, refer to the provider documentation:
+### Authentication
 
-- **[GitHub OAuth Docs](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app)**
-- **[Google OAuth Docs](https://developers.google.com/identity/protocols/oauth2)**
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/auth/google` | Returns Google OAuth consent URL |
+| `GET` | `/auth/google/callback` | Handles Google OAuth callback, issues tokens, redirects to client |
+| `GET` | `/auth/github` | Returns GitHub OAuth authorization URL |
+| `GET` | `/auth/github/callback` | Handles GitHub OAuth callback, issues tokens, redirects to client |
+| `POST` | `/auth/refresh` | Exchanges a refresh token for new access + refresh tokens |
+| `POST` | `/auth/logout` | Revokes the provided refresh token |
 
-#### Quick Setup Summary
+### Protected Routes (require `Authorization: Bearer <token>`)
 
-**GitHub OAuth:**
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/me` | Returns the authenticated user's profile |
+| `GET` | `/api/notes` | Lists all notes for the authenticated user |
+| `POST` | `/api/notes` | Creates a new note |
+| `GET` | `/api/notes/:id` | Returns a specific note |
+| `PATCH` | `/api/notes/:id` | Updates a note's title and/or content |
+| `DELETE` | `/api/notes/:id` | Deletes a note |
+
+### Example Requests
+
+```bash
+# Health check
+curl http://localhost:8080/
+
+# Create a note
+curl -X POST http://localhost:8080/api/notes \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"title": "My Note", "content": "Hello world"}'
+
+# List notes
+curl http://localhost:8080/api/notes \
+  -H "Authorization: Bearer YOUR_TOKEN"
+
+# Update a note
+curl -X PATCH http://localhost:8080/api/notes/NOTE_ID \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"title": "Updated Title"}'
+
+# Delete a note
+curl -X DELETE http://localhost:8080/api/notes/NOTE_ID \
+  -H "Authorization: Bearer YOUR_TOKEN"
+
+# Refresh tokens
+curl -X POST http://localhost:8080/auth/refresh \
+  -H "Content-Type: application/json" \
+  -d '{"refreshToken": "YOUR_REFRESH_TOKEN"}'
+
+# Logout
+curl -X POST http://localhost:8080/auth/logout \
+  -H "Content-Type: application/json" \
+  -d '{"refreshToken": "YOUR_REFRESH_TOKEN"}'
+```
+
+## OAuth Setup
+
+### GitHub
+
 1. Go to [GitHub Developer Settings](https://github.com/settings/developers)
 2. Create a new OAuth App
-3. Set Authorization callback URL to: `{BASE_URL}/auth/github/callback`
-4. Copy Client ID and Client Secret to your `.env` file
+3. Set **Authorization callback URL** to `{BASE_URL}/auth/github/callback`
+4. Copy the Client ID and Client Secret to `.env`
 
-**Google OAuth:**
-1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Create a new project or select existing one
-3. Navigate to **APIs & Services** → **Credentials**
-4. Create OAuth 2.0 credentials
-5. Set Authorized redirect URIs to: `{BASE_URL}/auth/google/callback`
-6. Copy Client ID and Client Secret to your `.env` file
+### Google
 
-## 📊 Database
+1. Go to [Google Cloud Console](https://console.cloud.google.com/) > **APIs & Services** > **Credentials**
+2. Create OAuth 2.0 credentials (Web application)
+3. Add `{BASE_URL}/auth/google/callback` to **Authorized redirect URIs**
+4. Copy the Client ID and Client Secret to `.env`
 
-The backend uses [Jao](https://pub.dev/packages/jao) as an ORM with PostgreSQL for both local development and production.
+## Database
 
-### Schema
+The backend uses [Jao ORM](https://pub.dev/packages/jao) with PostgreSQL. Models and repositories live in the shared `packages/recall_data/` package.
 
-#### Users Table
-```sql
-CREATE TABLE users (
-  id TEXT PRIMARY KEY,
-  email TEXT UNIQUE NOT NULL,
-  first_name TEXT NOT NULL,
-  last_name TEXT NOT NULL,
-  provider TEXT NOT NULL,
-  provider_id TEXT NOT NULL,
-  avatar_url TEXT,
-  created_at DATETIME NOT NULL,
-  updated_at DATETIME NOT NULL
-);
-```
+### Tables
 
-#### Notes Table
-```sql
-CREATE TABLE notes (
-  id TEXT PRIMARY KEY,
-  user_id TEXT NOT NULL,
-  title TEXT NOT NULL,
-  content TEXT NOT NULL,
-  created_at DATETIME NOT NULL,
-  updated_at DATETIME NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES users (id)
-);
-```
+- **app_users** — id, email, firstName, lastName, provider, providerId, avatarUrl, timestamps
+- **app_notes** — id, userId (FK), title, content, timestamps
+- **refresh_token_entrys** — id, userId (FK), tokenHash, expiresAt, revokedAt, timestamps
 
-### Database Operations
+### Running Migrations
 
 ```bash
-# Generate database code
-dart run build_runner build
-
-# Watch for changes
-dart run build_runner watch
+cd packages/recall_data
+dart run bin/migrate.dart
 ```
 
-## 🛣️ API Routes
-
-### Authentication
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/auth/google` | Get Google OAuth URL |
-| `GET` | `/auth/github` | Get GitHub OAuth URL |
-| `GET` | `/auth/google/callback` | Google OAuth callback |
-| `GET` | `/auth/github/callback` | GitHub OAuth callback |
-
-### User Management
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/me` | Get current user info |
-
-### Notes
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/notes` | Get user's notes |
-| `POST` | `/api/notes` | Create a new note |
-| `GET` | `/api/notes/{id}` | Get specific note |
-| `PUT` | `/api/notes/{id}` | Update a note |
-| `DELETE` | `/api/notes/{id}` | Delete a note |
-
-### Example API Usage
-
-#### Create a Note
+## Testing
 
 ```bash
-curl -X POST http://localhost:8080/api/notes \
-  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "title": "My First Note",
-    "content": "This is the content of my note"
-  }'
-```
-
-#### Get User's Notes
-
-```bash
-curl -X GET http://localhost:8080/api/notes \
-  -H "Authorization: Bearer YOUR_JWT_TOKEN"
-```
-
-## 🧪 Testing
-
-### Run Tests
-
-```bash
-# Run all tests
 dart test
-
-# Run tests with coverage
-dart test --coverage=coverage
 ```
 
-### Test Structure
+## Dependencies
 
-```
-test/
-├── routes/
-│   └── index_test.dart    # API route tests
-└── unit/                  # Unit tests
-```
+| Package | Purpose |
+|---------|---------|
+| `dart_frog` | Web framework with file-based routing |
+| `dart_frog_auth` | Bearer token authentication middleware |
+| `jao` | ORM for PostgreSQL |
+| `recall_data` | Shared repositories, services, and models |
+| `common` | Shared data classes and utilities |
+| `shelf_cors_headers` | CORS middleware |
+| `crypto` | Token hashing |
+| `http` | HTTP client for OAuth provider APIs |
 
-## 🚀 Deployment
+## Troubleshooting
 
-### Local Development
-
+**Port already in use:**
 ```bash
-dart_frog dev
-```
-
-### Production Build
-
-```bash
-dart_frog build
-dart run build/bin/server.dart
-```
-
-### Production Deployment
-
-The backend can be deployed to any platform that supports Dart server applications.
-
-## 🔒 Security
-
-### Authentication
-
-- OAuth 2.0 with Google and GitHub
-- JWT tokens for API authentication
-- Secure token storage and validation
-
-### CORS
-
-CORS is configured to allow requests from the frontend domain.
-
-### Environment Variables
-
-Sensitive configuration is stored in environment variables and not committed to version control.
-
-## 📝 Development
-
-### Code Generation
-
-The project uses code generation for:
-
-- Database models (Drift)
-- JSON serialization (Dart Mappable)
-
-```bash
-# Generate all code
-dart run build_runner build
-
-# Watch for changes
-dart run build_runner watch
-```
-
-### Code Style
-
-The project uses [Very Good Analysis](https://pub.dev/packages/very_good_analysis) for linting.
-
-```bash
-# Run linter
-dart analyze
-
-# Fix issues
-dart fix --apply
-```
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-#### Database Connection Issues
-
-```bash
-# Regenerate database code
-dart run build_runner clean
-dart run build_runner build
-```
-
-#### OAuth Issues
-
-1. Verify OAuth app configuration
-2. Check callback URLs match exactly
-3. Ensure environment variables are set correctly
-
-#### Port Already in Use
-
-```bash
-# Kill process on port 8080
 lsof -ti:8080 | xargs kill -9
 ```
 
-## 📚 Dependencies
+**OAuth callback fails:** Verify your callback URLs match exactly — `{BASE_URL}/auth/google/callback` and `{BASE_URL}/auth/github/callback`.
 
-### Core Dependencies
-
-- `dart_frog` - Web framework
-- `drift` - Database library
-- `dart_jsonwebtoken` - JWT handling
-- `http` - HTTP client
-- `uuid` - UUID generation
-
-### Development Dependencies
-
-- `build_runner` - Code generation
-- `drift_dev` - Drift code generation
-- `very_good_analysis` - Linting rules
-- `test` - Testing framework
-
-## 🤝 Contributing
-
-1. Follow the existing code style
-2. Add tests for new features
-3. Update documentation
-4. Ensure all tests pass
-
-## 📄 License
-
-This project is licensed under the MIT License.
+**Database connection refused:** Ensure PostgreSQL is running with `docker compose up -d` and your `.env` credentials match the `docker-compose.yml` config.
