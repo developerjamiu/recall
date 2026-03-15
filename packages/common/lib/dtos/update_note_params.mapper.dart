@@ -25,11 +25,13 @@ class UpdateNoteParamsMapper extends ClassMapperBase<UpdateNoteParams> {
   static const Field<UpdateNoteParams, String> _f$title = Field(
     'title',
     _$title,
+    opt: true,
   );
   static String? _$content(UpdateNoteParams v) => v.content;
   static const Field<UpdateNoteParams, String> _f$content = Field(
     'content',
     _$content,
+    opt: true,
   );
 
   @override
@@ -37,6 +39,8 @@ class UpdateNoteParamsMapper extends ClassMapperBase<UpdateNoteParams> {
     #title: _f$title,
     #content: _f$content,
   };
+  @override
+  final bool ignoreNull = true;
 
   static UpdateNoteParams _instantiate(DecodingData data) {
     return UpdateNoteParams(

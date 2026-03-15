@@ -4,9 +4,9 @@ import 'package:luthor/luthor.dart';
 
 part 'update_note_params.mapper.dart';
 
-@MappableClass()
+@MappableClass(ignoreNull: true)
 class UpdateNoteParams with UpdateNoteParamsMappable {
-  const UpdateNoteParams({required this.title, required this.content});
+  const UpdateNoteParams({this.title, this.content});
 
   final String? title;
   final String? content;

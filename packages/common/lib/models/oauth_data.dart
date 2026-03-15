@@ -10,6 +10,7 @@ class OAuthData with OAuthDataMappable {
     required this.firstName,
     required this.lastName,
     required this.provider,
+    required this.providerId,
     this.avatarUrl,
   });
 
@@ -18,6 +19,7 @@ class OAuthData with OAuthDataMappable {
   final String firstName;
   final String lastName;
   final String provider;
+  final String providerId;
   final String? avatarUrl;
 
   static const fromMap = OAuthDataMapper.fromMap;

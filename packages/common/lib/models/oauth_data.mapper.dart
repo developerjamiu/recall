@@ -42,6 +42,12 @@ class OAuthDataMapper extends ClassMapperBase<OAuthData> {
     'provider',
     _$provider,
   );
+  static String _$providerId(OAuthData v) => v.providerId;
+  static const Field<OAuthData, String> _f$providerId = Field(
+    'providerId',
+    _$providerId,
+    key: r'provider_id',
+  );
   static String? _$avatarUrl(OAuthData v) => v.avatarUrl;
   static const Field<OAuthData, String> _f$avatarUrl = Field(
     'avatarUrl',
@@ -57,6 +63,7 @@ class OAuthDataMapper extends ClassMapperBase<OAuthData> {
     #firstName: _f$firstName,
     #lastName: _f$lastName,
     #provider: _f$provider,
+    #providerId: _f$providerId,
     #avatarUrl: _f$avatarUrl,
   };
 
@@ -67,6 +74,7 @@ class OAuthDataMapper extends ClassMapperBase<OAuthData> {
       firstName: data.dec(_f$firstName),
       lastName: data.dec(_f$lastName),
       provider: data.dec(_f$provider),
+      providerId: data.dec(_f$providerId),
       avatarUrl: data.dec(_f$avatarUrl),
     );
   }
@@ -136,6 +144,7 @@ abstract class OAuthDataCopyWith<$R, $In extends OAuthData, $Out>
     String? firstName,
     String? lastName,
     String? provider,
+    String? providerId,
     String? avatarUrl,
   });
   OAuthDataCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
@@ -156,6 +165,7 @@ class _OAuthDataCopyWithImpl<$R, $Out>
     String? firstName,
     String? lastName,
     String? provider,
+    String? providerId,
     Object? avatarUrl = $none,
   }) => $apply(
     FieldCopyWithData({
@@ -164,6 +174,7 @@ class _OAuthDataCopyWithImpl<$R, $Out>
       if (firstName != null) #firstName: firstName,
       if (lastName != null) #lastName: lastName,
       if (provider != null) #provider: provider,
+      if (providerId != null) #providerId: providerId,
       if (avatarUrl != $none) #avatarUrl: avatarUrl,
     }),
   );
@@ -174,6 +185,7 @@ class _OAuthDataCopyWithImpl<$R, $Out>
     firstName: data.get(#firstName, or: $value.firstName),
     lastName: data.get(#lastName, or: $value.lastName),
     provider: data.get(#provider, or: $value.provider),
+    providerId: data.get(#providerId, or: $value.providerId),
     avatarUrl: data.get(#avatarUrl, or: $value.avatarUrl),
   );
 
