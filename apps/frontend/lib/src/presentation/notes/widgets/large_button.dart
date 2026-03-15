@@ -22,8 +22,8 @@ class LargeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = GlobeTheme.of(context).textTheme;
-    final colorScheme = GlobeTheme.of(context).colorScheme;
+    final textTheme = RecallTheme.of(context).textTheme;
+    final colorScheme = RecallTheme.of(context).colorScheme;
 
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -66,8 +66,8 @@ class LargeButton extends StatelessWidget {
     text: text,
     icon: icon,
     onPressed: onPressed,
-    color: AppColors.purple,
-    borderColor: AppColors.purple,
+    color: AppColors.primary,
+    borderColor: AppColors.primary,
     textColor: AppColors.colourWhite,
   );
 }

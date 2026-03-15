@@ -19,8 +19,6 @@ class LandingPage extends ConsumerStatefulWidget {
 }
 
 class _LandingPageState extends ConsumerState<LandingPage> {
-  bool _termsAndConditionsChecked = false;
-
   @override
   void initState() {
     super.initState();
@@ -34,10 +32,12 @@ class _LandingPageState extends ConsumerState<LandingPage> {
 
     final uri = GoRouterState.of(context).uri;
     final params = uri.queryParameters;
-    String? token = params['token'];
-    String? error = params['error'];
 
-    ref.read(authStateProvider.notifier).processOAuthCallback(token, error);
+    ref.read(authStateProvider.notifier).processOAuthCallback(
+      token: params['token'],
+      refreshToken: params['refreshToken'],
+      error: params['error'],
+    );
   }
 
   void _showErrorSnackbar(String message) {
@@ -50,38 +50,17 @@ class _LandingPageState extends ConsumerState<LandingPage> {
     );
   }
 
-  void _showTermsErrorSnackbar() {
-    if (!mounted) return;
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: const Text(
-          'Please accept the Terms of Service and Privacy Policy to continue',
-        ),
-        backgroundColor: Theme.of(context).colorScheme.error,
-      ),
-    );
-  }
-
   Future<void> _signInWithGoogle() async {
-    if (!_termsAndConditionsChecked) {
-      _showTermsErrorSnackbar();
-      return;
-    }
     await ref.read(authStateProvider.notifier).signInWithGoogle();
   }
 
   Future<void> _signInWithGitHub() async {
-    if (!_termsAndConditionsChecked) {
-      _showTermsErrorSnackbar();
-      return;
-    }
     await ref.read(authStateProvider.notifier).signInWithGitHub();
   }
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = GlobeTheme.of(context).colorScheme;
+    final colorScheme = RecallTheme.of(context).colorScheme;
     final themeToggle = ref.read(themeModeNotifierProvider.notifier).toggle;
 
     ref.listen(authStateProvider, (_, next) {
@@ -104,18 +83,10 @@ class _LandingPageState extends ConsumerState<LandingPage> {
                     ? MobileLandingContent(
                         onSignInWithGoogle: _signInWithGoogle,
                         onSignInWithGitHub: _signInWithGitHub,
-                        onTermsAndConditionsChanged: (value) => setState(
-                          () => _termsAndConditionsChecked = value ?? false,
-                        ),
-                        termsAndConditionsChecked: _termsAndConditionsChecked,
                       )
                     : DesktopLandingContent(
                         onSignInWithGoogle: _signInWithGoogle,
                         onSignInWithGitHub: _signInWithGitHub,
-                        onTermsAndConditionsChanged: (value) => setState(
-                          () => _termsAndConditionsChecked = value ?? false,
-                        ),
-                        termsAndConditionsChecked: _termsAndConditionsChecked,
                       ),
               ),
               const LandingFooter(),

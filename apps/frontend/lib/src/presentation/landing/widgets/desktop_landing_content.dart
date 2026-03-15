@@ -7,32 +7,27 @@ class DesktopLandingContent extends StatelessWidget {
     super.key,
     required this.onSignInWithGoogle,
     required this.onSignInWithGitHub,
-    required this.onTermsAndConditionsChanged,
-    required this.termsAndConditionsChecked,
   });
 
   final VoidCallback onSignInWithGoogle;
   final VoidCallback onSignInWithGitHub;
-  final void Function(bool?) onTermsAndConditionsChanged;
-  final bool termsAndConditionsChecked;
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Flexible(child: LandingHero()),
-
-          const SizedBox(width: 60),
-
-          SignInCard(
-            onSignInWithGoogle: onSignInWithGoogle,
-            onSignInWithGitHub: onSignInWithGitHub,
-            onTermsAndConditionsChanged: onTermsAndConditionsChanged,
-            termsAndConditionsChecked: termsAndConditionsChecked,
-          ),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 48),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Flexible(child: LandingHero()),
+            const SizedBox(width: 80),
+            SignInCard(
+              onSignInWithGoogle: onSignInWithGoogle,
+              onSignInWithGitHub: onSignInWithGitHub,
+            ),
+          ],
+        ),
       ),
     );
   }

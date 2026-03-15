@@ -3,8 +3,8 @@ import 'package:frontend/src/shared/theme/theme_data.dart';
 
 class SnackbarUtils {
   static void showError(BuildContext context, String message) {
-    final colorScheme = GlobeTheme.of(context).colorScheme;
-    final textTheme = GlobeTheme.of(context).textTheme;
+    final colorScheme = RecallTheme.of(context).colorScheme;
+    final textTheme = RecallTheme.of(context).textTheme;
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -30,8 +30,8 @@ class SnackbarUtils {
   }
 
   static void showSuccess(BuildContext context, String message) {
-    final colorScheme = GlobeTheme.of(context).colorScheme;
-    final textTheme = GlobeTheme.of(context).textTheme;
+    final colorScheme = RecallTheme.of(context).colorScheme;
+    final textTheme = RecallTheme.of(context).textTheme;
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -61,8 +61,8 @@ class SnackbarUtils {
   }
 
   static void showInfo(BuildContext context, String message) {
-    final colorScheme = GlobeTheme.of(context).colorScheme;
-    final textTheme = GlobeTheme.of(context).textTheme;
+    final colorScheme = RecallTheme.of(context).colorScheme;
+    final textTheme = RecallTheme.of(context).textTheme;
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/src/presentation/notes/widgets/delete_confirmation_dialog.dart';
 import 'package:frontend/src/presentation/notes/widgets/mobile_note_text_editor.dart';
-import 'package:frontend/src/presentation/notes/widgets/notes_app_bar.dart';
-import 'package:frontend/src/shared/widgets/app_button.dart';
+import 'package:frontend/src/presentation/notes/widgets/save_status_indicator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/src/shared/theme/theme_data.dart';
-import 'package:frontend/src/shared/widgets/app_icon.dart';
-import 'package:frontend/src/presentation/notes/widgets/title_section.dart';
 import 'package:frontend/src/providers/selected_note_provider.dart';
 import 'package:frontend/src/providers/note_mutations.dart';
 import 'package:frontend/src/shared/utils/snackbar_utils.dart';
-import 'package:frontend/src/shared/utils/note_validation.dart';
 import 'package:riverpod/experimental/mutation.dart';
 
 class MobileNoteEditorPage extends ConsumerStatefulWidget {
@@ -23,12 +19,15 @@ class MobileNoteEditorPage extends ConsumerStatefulWidget {
 }
 
 class _MobileNoteEditorPageState extends ConsumerState<MobileNoteEditorPage> {
+  late final TextEditingController _titleController;
+
   @override
   void initState() {
     super.initState();
+    final selectedNote = ref.read(selectedNoteProvider);
+    _titleController = TextEditingController(text: selectedNote.title);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final selectedNote = ref.read(selectedNoteProvider);
       if (selectedNote.id == null) {
         ref.read(selectedNoteProvider.notifier).clearSelection();
       }
@@ -36,32 +35,21 @@ class _MobileNoteEditorPageState extends ConsumerState<MobileNoteEditorPage> {
   }
 
   @override
+  void dispose() {
+    _titleController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final colorScheme = GlobeTheme.of(context).colorScheme;
+    final colorScheme = RecallTheme.of(context).colorScheme;
+    final textTheme = RecallTheme.of(context).textTheme;
     final selectedNote = ref.watch(selectedNoteProvider);
     final isNewNote = selectedNote.id == null;
-    final saveState = ref.watch(saveNote);
     final deleteState = ref.watch(deleteNote);
 
-    ref.listen<MutationState<dynamic>>(saveNote, (previous, next) {
-      switch (next) {
-        case MutationSuccess():
-          SnackbarUtils.showSuccess(context, 'Note saved successfully');
-        case MutationError():
-          String message;
-          if (next.error is NoteValidationException) {
-            message = (next.error as NoteValidationException).message;
-          } else {
-            message = 'Failed to save note: ${next.error.toString()}';
-          }
-          SnackbarUtils.showError(context, message);
-        case MutationPending():
-        case MutationIdle():
-          break;
-      }
-    });
-
     ref.listen<MutationState<void>>(deleteNote, (previous, next) {
+      if (previous is! MutationPending) return;
       switch (next) {
         case MutationSuccess():
           SnackbarUtils.showSuccess(context, 'Note deleted successfully!');
@@ -76,81 +64,88 @@ class _MobileNoteEditorPageState extends ConsumerState<MobileNoteEditorPage> {
       }
     });
 
-    return Scaffold(
+    return PopScope(
+      onPopInvokedWithResult: (didPop, _) {
+        if (didPop) {
+          ScaffoldMessenger.of(context).clearSnackBars();
+        }
+      },
+      child: Scaffold(
       backgroundColor: colorScheme.background,
-      appBar: NotesAppBar(showBottom: false),
-      body: ListView(
-        padding: const EdgeInsets.all(24),
+      appBar: AppBar(
+        backgroundColor: colorScheme.background,
+        surfaceTintColor: Colors.transparent,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            ScaffoldMessenger.of(context).clearSnackBars();
+            context.pop();
+          },
+        ),
+        title: const SaveStatusIndicator(),
+        centerTitle: true,
+        actions: [
+          if (!isNewNote)
+            IconButton(
+              icon: Icon(
+                Icons.delete_outline,
+                color: colorScheme.error,
+              ),
+              onPressed: deleteState is MutationPending
+                  ? null
+                  : () => DeleteConfirmationDialog.show(
+                        context,
+                        onDeleteClicked: switch (deleteState) {
+                          MutationPending() => null,
+                          _ => () => executeDeleteNote(ref, selectedNote.id!),
+                        },
+                      ),
+            ),
+          const SizedBox(width: 8),
+        ],
+      ),
+      body: Column(
         children: [
-          TitleSection(
-            currentTitle: selectedNote.title,
-            onTitleChanged: (title) {
-              ref.read(selectedNoteProvider.notifier).updateTitle(title);
-            },
-          ),
-          const SizedBox(height: 24),
-          MobileNoteTextEditor(
-            key: ValueKey(selectedNote.id),
-            currentContent: selectedNote.content,
-            onContentChanged: (content) {
-              ref.read(selectedNoteProvider.notifier).updateContent(content);
-            },
-          ),
-          const SizedBox(height: 24),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 0),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Expanded(
-                  child: AppButton(
-                    text: 'Save',
-                    icon: AppIcon.save(),
-                    onPressed: saveState is MutationPending
-                        ? null
-                        : () async {
-                            await executeSaveNote(ref);
-                            if (context.mounted) {
-                              context.pop();
-                            }
-                          },
-                  ),
+            padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
+            child: TextField(
+              controller: _titleController,
+              style: textTheme.heading4?.copyWith(
+                color: colorScheme.onSurface,
+                fontWeight: FontWeight.w600,
+              ),
+              onChanged: (title) {
+                ref.read(selectedNoteProvider.notifier).updateTitle(title);
+              },
+              decoration: InputDecoration(
+                hintText: 'Title',
+                hintStyle: textTheme.heading4?.copyWith(
+                  color: colorScheme.onSurface.withValues(alpha: 0.3),
+                  fontWeight: FontWeight.w600,
                 ),
-                if (!isNewNote) ...[
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: AppButton(
-                      text: 'Delete Note',
-                      icon: AppIcon.delete(),
-                      // onPressed: deleteState is MutationPending
-                      //     ? null
-                      //     : () async {
-                      //         await executeDeleteNote(ref, selectedNote.id!);
-                      //         if (context.mounted) {
-                      //           context.pop();
-                      //         }
-                      //       },
-                      onPressed: deleteState is MutationPending
-                          ? null
-                          : () => DeleteConfirmationDialog.show(
-                              context,
-                              onDeleteClicked: switch (deleteState) {
-                                MutationPending() => null,
-                                _ => () => executeDeleteNote(
-                                  ref,
-                                  selectedNote.id!,
-                                ),
-                              },
-                            ),
-                      isDestructive: true,
-                    ),
-                  ),
-                ],
-              ],
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.zero,
+              ),
+              maxLines: null,
+            ),
+          ),
+          Divider(
+            color: colorScheme.outline.withValues(alpha: 0.3),
+            indent: 20,
+            endIndent: 20,
+          ),
+          Expanded(
+            child: MobileNoteTextEditor(
+              key: ValueKey(selectedNote.id),
+              currentContent: selectedNote.content,
+              onContentChanged: (content) {
+                ref.read(selectedNoteProvider.notifier).updateContent(content);
+              },
             ),
           ),
         ],
       ),
+    ),
     );
   }
 }

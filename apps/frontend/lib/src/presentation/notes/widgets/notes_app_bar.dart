@@ -31,8 +31,8 @@ class _NotesAppBarState extends ConsumerState<NotesAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = GlobeTheme.of(context).colorScheme;
-    final textTheme = GlobeTheme.of(context).textTheme;
+    final colorScheme = RecallTheme.of(context).colorScheme;
+    final textTheme = RecallTheme.of(context).textTheme;
 
     final canPop = ModalRoute.canPopOf(context) ?? false;
 

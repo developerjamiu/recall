@@ -13,28 +13,23 @@ class SocialIcons extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SocialIcon(
-          icon: AppIcon.discord(),
-          onTap: () => _launchUrl('https://invertase.link/globe-discord'),
-        ),
-        const SizedBox(width: 12),
-        SocialIcon(
           icon: AppIcon.x(),
-          onTap: () => _launchUrl('https://x.com/dart_globe'),
+          onTap: () => _launchUrl('https://x.com/developerjamiu'),
         ),
         const SizedBox(width: 12),
         SocialIcon(
           icon: AppIcon.github(),
-          onTap: () => _launchUrl('https://github.com/invertase'),
+          onTap: () => _launchUrl('https://github.com/developerjamiu'),
         ),
         const SizedBox(width: 12),
         SocialIcon(
           icon: AppIcon.linkedin(),
-          onTap: () => _launchUrl('https://www.linkedin.com/company/invertase'),
+          onTap: () => _launchUrl('https://www.linkedin.com/in/developerjamiu'),
         ),
         const SizedBox(width: 12),
         SocialIcon(
           icon: AppIcon.email(),
-          onTap: () => _launchUrl('mailto:contact@globe.dev'),
+          onTap: () => _launchUrl('mailto:developerjamiu@gmail.com'),
         ),
       ],
     );

@@ -32,18 +32,28 @@ class AuthNotifier extends AsyncNotifier<User?> {
     await authService.signInWithGitHub();
   }
 
-  Future<void> handleAuthCallback(String token) async {
+  Future<void> handleAuthCallback({
+    required String accessToken,
+    String? refreshToken,
+  }) async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       final authService = ref.read(authServiceProvider);
       final userService = ref.watch(userServiceProvider);
 
-      authService.saveToken(token);
+      authService.saveTokens(
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+      );
       return await userService.getMyProfile();
     });
   }
 
-  Future<void> processOAuthCallback(String? token, String? error) async {
+  Future<void> processOAuthCallback({
+    String? token,
+    String? refreshToken,
+    String? error,
+  }) async {
     if (error != null) {
       state = AsyncValue.error(
         'Sign-in failed: ${Uri.decodeComponent(error)}',
@@ -52,13 +62,16 @@ class AuthNotifier extends AsyncNotifier<User?> {
       return;
     }
     if (token != null) {
-      await handleAuthCallback(token);
+      await handleAuthCallback(
+        accessToken: token,
+        refreshToken: refreshToken,
+      );
     }
   }
 
   Future<void> signOut() async {
     final authService = ref.read(authServiceProvider);
-    authService.signOut();
+    await authService.signOut();
     state = const AsyncValue.data(null);
   }
 }

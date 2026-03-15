@@ -11,10 +11,12 @@ class NoteTextEditor extends StatefulWidget {
     super.key,
     required this.currentContent,
     required this.onContentChanged,
+    this.autoFocus = false,
   });
 
   final String currentContent;
   final ValueChanged<String> onContentChanged;
+  final bool autoFocus;
 
   @override
   State<NoteTextEditor> createState() => _NoteTextEditorState();
@@ -91,49 +93,51 @@ class _NoteTextEditorState extends State<NoteTextEditor> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = GlobeTheme.of(context).colorScheme;
+    final colorScheme = RecallTheme.of(context).colorScheme;
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          height: MediaQuery.of(context).size.height * 0.4,
-          decoration: BoxDecoration(
-            border: Border.all(color: colorScheme.outline),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          child: QuillEditor.basic(
-            controller: _controller,
-            focusNode: _focusNode,
-            config: QuillEditorConfig(
-              padding: EdgeInsets.zero,
-              scrollable: true,
-              autoFocus: false,
-              expands: false,
-              placeholder: 'Start typing...',
-              customStyles: DefaultStyles(
-                placeHolder: DefaultTextBlockStyle(
-                  TextStyle(
-                    color: colorScheme.onSurface.withValues(alpha: 0.5),
-                    fontSize: 14,
-                    height: 1.4,
+        Row(
+          children: [
+            ToolBarAndActions(controller: _controller),
+            const Spacer(),
+            const ActionButtons(),
+          ],
+        ),
+        const SizedBox(height: 16),
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: colorScheme.outline),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: QuillEditor.basic(
+              controller: _controller,
+              focusNode: _focusNode,
+              config: QuillEditorConfig(
+                padding: EdgeInsets.zero,
+                scrollable: true,
+                autoFocus: widget.autoFocus,
+                expands: true,
+                placeholder: 'Start typing...',
+                customStyles: DefaultStyles(
+                  placeHolder: DefaultTextBlockStyle(
+                    TextStyle(
+                      color: colorScheme.onSurface.withValues(alpha: 0.5),
+                      fontSize: 14,
+                      height: 1.4,
+                    ),
+                    const HorizontalSpacing(0, 0),
+                    const VerticalSpacing(6, 0),
+                    const VerticalSpacing(0, 0),
+                    null,
                   ),
-                  const HorizontalSpacing(0, 0),
-                  const VerticalSpacing(6, 0),
-                  const VerticalSpacing(0, 0),
-                  null,
                 ),
               ),
             ),
           ),
-        ),
-        const SizedBox(height: 24),
-        Row(
-          children: [
-            ToolBarAndActions(controller: controller),
-            const Spacer(),
-            const ActionButtons(),
-          ],
         ),
       ],
     );

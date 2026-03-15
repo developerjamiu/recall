@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/src/presentation/landing/widgets/globe_logo.dart';
+import 'package:frontend/src/shared/widgets/recall_logo.dart';
 import 'package:frontend/src/presentation/landing/widgets/theme_toggle.dart';
 
 class LandingHeader extends StatelessWidget {
@@ -14,7 +14,7 @@ class LandingHeader extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const GlobeLogo(),
+          const RecallLogo(),
           ThemeToggle(onThemeToggle: onThemeToggle),
         ],
       ),

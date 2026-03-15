@@ -24,7 +24,7 @@ class LoadingIndicator extends StatelessWidget {
             child: CircularProgressIndicator(
               strokeCap: StrokeCap.round,
               strokeWidth: 4,
-              color: AppColors.purple.shade500,
+              color: AppColors.primary.shade500,
             ),
           ),
         ],

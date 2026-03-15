@@ -8,40 +8,47 @@ class ThemeToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = GlobeTheme.of(context).colorScheme;
+    final colorScheme = RecallTheme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return GestureDetector(
-      onTap: onThemeToggle,
-      child: Container(
-        width: 50,
-        height: 26,
-        decoration: BoxDecoration(
-          color: colorScheme.surface,
-          border: Border.all(color: colorScheme.outline),
-          borderRadius: BorderRadius.circular(30),
-        ),
-        child: Stack(
-          children: [
-            AnimatedPositioned(
-              duration: const Duration(milliseconds: 200),
-              left: isDark ? 3 : 26,
-              top: 2,
-              child: Container(
-                width: 20,
-                height: 20,
-                decoration: BoxDecoration(
-                  border: Border.all(color: colorScheme.outline),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Icon(
-                  isDark ? Icons.dark_mode_outlined : Icons.light_mode_outlined,
-                  size: 12,
-                  color: colorScheme.onSurface,
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: onThemeToggle,
+        child: Container(
+          width: 52,
+          height: 28,
+          decoration: BoxDecoration(
+            color: isDark
+                ? colorScheme.primary.withValues(alpha: 0.2)
+                : colorScheme.primary.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: Stack(
+            children: [
+              AnimatedPositioned(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeInOut,
+                left: isDark ? 3 : 27,
+                top: 3,
+                child: Container(
+                  width: 22,
+                  height: 22,
+                  decoration: BoxDecoration(
+                    color: colorScheme.primary,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    isDark
+                        ? Icons.dark_mode_rounded
+                        : Icons.light_mode_rounded,
+                    size: 13,
+                    color: Colors.white,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

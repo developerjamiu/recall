@@ -22,7 +22,7 @@ class AppIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = GlobeTheme.of(context).colorScheme;
+    final colorScheme = RecallTheme.of(context).colorScheme;
 
     final key = Key('AppIcon-$assetName');
 
@@ -53,9 +53,6 @@ class AppIcon extends StatelessWidget {
   factory AppIcon.burgerMenu({double? size}) =>
       AppIcon(assetName: 'burger-menu.svg', width: size, height: size);
 
-  factory AppIcon.discord({double? size}) =>
-      AppIcon(assetName: 'discord.svg', width: size, height: size);
-
   factory AppIcon.edit({double? size, bool hasColor = true}) => AppIcon(
     assetName: 'edit.svg',
     width: size,
@@ -75,16 +72,6 @@ class AppIcon extends StatelessWidget {
   factory AppIcon.github({double? size}) =>
       AppIcon(assetName: 'github.svg', width: size, height: size);
 
-  factory AppIcon.globe({double? size}) => AppIcon(
-    assetName: 'globe.svg',
-    width: size,
-    height: size,
-    hasColor: true,
-  );
-
-  factory AppIcon.globeText({double? size}) =>
-      AppIcon(assetName: 'globe_text.svg', width: size, height: size);
-
   factory AppIcon.google({double? size}) => AppIcon(
     assetName: 'google.svg',
     width: size,
@@ -92,14 +79,8 @@ class AppIcon extends StatelessWidget {
     hasColor: true,
   );
 
-  factory AppIcon.link({double? size}) =>
-      AppIcon(assetName: 'link.svg', width: size, height: size);
-
   factory AppIcon.linkedin({double? size}) =>
       AppIcon(assetName: 'linkedin.svg', width: size, height: size);
-
-  factory AppIcon.note({double? size}) =>
-      AppIcon(assetName: 'note.svg', width: size, height: size);
 
   factory AppIcon.recall({double? size}) => AppIcon(
     assetName: 'recall.svg',
@@ -107,9 +88,6 @@ class AppIcon extends StatelessWidget {
     height: size,
     hasColor: true,
   );
-
-  factory AppIcon.save({double? size}) =>
-      AppIcon(assetName: 'save.svg', width: size, height: size);
 
   factory AppIcon.x({double? size}) =>
       AppIcon(assetName: 'x.svg', width: size, height: size);

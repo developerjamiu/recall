@@ -42,8 +42,8 @@ class _TitleSectionState extends State<TitleSection> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = GlobeTheme.of(context).textTheme;
-    final colorScheme = GlobeTheme.of(context).colorScheme;
+    final textTheme = RecallTheme.of(context).textTheme;
+    final colorScheme = RecallTheme.of(context).colorScheme;
 
     final isNewNote = widget.currentTitle.isEmpty;
 

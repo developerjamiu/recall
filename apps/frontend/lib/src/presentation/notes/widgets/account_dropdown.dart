@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:frontend/src/shared/theme/app_colors.dart';
 import 'package:frontend/src/shared/theme/theme_data.dart';
 import 'package:frontend/src/providers/auth_provider.dart';
 
@@ -9,8 +8,8 @@ class AccountDropdown extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final colorScheme = GlobeTheme.of(context).colorScheme;
-    final textTheme = GlobeTheme.of(context).textTheme;
+    final colorScheme = RecallTheme.of(context).colorScheme;
+    final textTheme = RecallTheme.of(context).textTheme;
     final authState = ref.watch(authStateProvider);
     final user = authState.value;
 
@@ -29,8 +28,12 @@ class AccountDropdown extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: Row(
               children: [
-                Icon(Icons.logout, size: 16),
-                SizedBox(width: 16),
+                Icon(
+                  Icons.logout_rounded,
+                  size: 16,
+                  color: colorScheme.onSurface.withValues(alpha: 0.6),
+                ),
+                const SizedBox(width: 12),
                 Text(
                   'Sign Out',
                   style: textTheme.body?.copyWith(color: colorScheme.onSurface),
@@ -43,50 +46,54 @@ class AccountDropdown extends ConsumerWidget {
       ],
       position: PopupMenuPosition.under,
       color: colorScheme.background,
-      elevation: 2,
-      constraints: const BoxConstraints(maxWidth: 120),
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      constraints: const BoxConstraints(maxWidth: 140),
       menuPadding: EdgeInsets.zero,
-      child: DecoratedBox(
+      clipBehavior: Clip.antiAlias,
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(
-          border: Border.all(color: colorScheme.outline),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(20),
+          color: colorScheme.primary.withValues(alpha: 0.08),
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 24,
-                height: 24,
-                decoration: BoxDecoration(
-                  color: AppColors.purple,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Center(
-                  child: Text(
-                    initials,
-                    style: textTheme.body?.copyWith(
-                      color: AppColors.colourWhite,
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                    ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 28,
+              height: 28,
+              decoration: BoxDecoration(
+                color: colorScheme.primary,
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: Text(
+                  initials,
+                  style: textTheme.body?.copyWith(
+                    color: Colors.white,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
-              const SizedBox(width: 12),
-              Text(
-                user.firstName,
-                style: textTheme.body?.copyWith(color: colorScheme.onSurface),
-              ),
-              const SizedBox(width: 24),
-              Icon(
-                Icons.keyboard_arrow_down,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              user.firstName,
+              style: textTheme.body?.copyWith(
                 color: colorScheme.onSurface,
-                size: 16,
+                fontWeight: FontWeight.w500,
               ),
-            ],
-          ),
+            ),
+            const SizedBox(width: 4),
+            Icon(
+              Icons.keyboard_arrow_down_rounded,
+              color: colorScheme.onSurface.withValues(alpha: 0.5),
+              size: 18,
+            ),
+          ],
         ),
       ),
     );

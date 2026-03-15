@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/src/shared/theme/theme_data.dart';
-import 'package:frontend/src/shared/widgets/app_icon.dart';
 import 'package:frontend/src/presentation/landing/widgets/theme_toggle.dart';
 
 class NoteMenu extends StatelessWidget {
@@ -16,118 +15,103 @@ class NoteMenu extends StatelessWidget {
     required VoidCallback? onSignOut,
     required double topOffset,
   }) {
-    return showGeneralDialog<T>(
+    return showModalBottomSheet<T>(
       context: context,
-      barrierDismissible: true,
-      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-      barrierColor: Colors.transparent,
-      transitionDuration: const Duration(milliseconds: 250),
-      pageBuilder:
-          (
-            BuildContext buildContext,
-            Animation<double> animation,
-            Animation<double> secondaryAnimation,
-          ) {
-            return Padding(
-              padding: EdgeInsets.only(top: topOffset),
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: NoteMenu(
-                  onThemeToggle: onThemeToggle,
-                  onSignOut: onSignOut,
-                ),
-              ),
-            );
-          },
-      transitionBuilder: (context, animation, secondaryAnimation, child) {
-        return SlideTransition(
-          position: Tween<Offset>(
-            begin: const Offset(0, -1),
-            end: Offset.zero,
-          ).animate(CurvedAnimation(parent: animation, curve: Curves.linear)),
-          child: child,
-        );
-      },
+      backgroundColor: Colors.transparent,
+      builder: (context) => NoteMenu(
+        onThemeToggle: onThemeToggle,
+        onSignOut: onSignOut,
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = GlobeTheme.of(context).colorScheme;
+    final colorScheme = RecallTheme.of(context).colorScheme;
+    final isDark = Theme.brightnessOf(context) == Brightness.dark;
 
-    return Material(
-      child: Container(
-        width: double.infinity,
-        color: colorScheme.background,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            NoteMenuOption(
-              title: 'My Notes',
-              icon: AppIcon.edit(hasColor: false, size: 24),
-              onTap: () {
-                context.pop();
-              },
+    return Container(
+      decoration: BoxDecoration(
+        color: isDark ? colorScheme.surface : Colors.white,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(height: 12),
+          Container(
+            width: 36,
+            height: 4,
+            decoration: BoxDecoration(
+              color: colorScheme.onSurface.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(2),
             ),
-            Divider(height: 1, color: colorScheme.outline),
-            NoteMenuOption(
-              title: 'Sign out',
-              icon: const Icon(Icons.close, size: 24),
-              onTap: () {
-                context.pop();
-                onSignOut?.call();
-              },
-            ),
-            Divider(height: 1, color: colorScheme.outline),
-            NoteMenuOption(
-              title: 'Theme',
-              icon: ThemeToggle(onThemeToggle: onThemeToggle),
-              onTap: onThemeToggle,
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 24),
+          _MenuItem(
+            icon: Icons.dark_mode_outlined,
+            title: 'Theme',
+            trailing: ThemeToggle(onThemeToggle: onThemeToggle),
+            onTap: onThemeToggle,
+          ),
+          _MenuItem(
+            icon: Icons.logout_rounded,
+            title: 'Sign out',
+            isDestructive: true,
+            onTap: () {
+              context.pop();
+              onSignOut?.call();
+            },
+          ),
+          SizedBox(height: MediaQuery.paddingOf(context).bottom + 16),
+        ],
       ),
     );
   }
 }
 
-class NoteMenuOption extends StatelessWidget {
-  const NoteMenuOption({
-    super.key,
-    required this.title,
+class _MenuItem extends StatelessWidget {
+  const _MenuItem({
     required this.icon,
-    this.onTap,
+    required this.title,
+    required this.onTap,
+    this.trailing,
+    this.isDestructive = false,
   });
 
+  final IconData icon;
   final String title;
-  final Widget icon;
-  final VoidCallback? onTap;
+  final VoidCallback onTap;
+  final Widget? trailing;
+  final bool isDestructive;
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = GlobeTheme.of(context).colorScheme;
-    final textTheme = GlobeTheme.of(context).textTheme;
+    final colorScheme = RecallTheme.of(context).colorScheme;
+    final textTheme = RecallTheme.of(context).textTheme;
+    final color = isDestructive
+        ? colorScheme.error
+        : colorScheme.onSurface;
 
-    return GestureDetector(
+    return InkWell(
       onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(color: colorScheme.surface),
-        padding: const EdgeInsets.symmetric(vertical: 24),
-        width: double.infinity,
-        alignment: Alignment.center,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         child: Row(
-          mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              title,
-              style: textTheme.body?.copyWith(
-                color: colorScheme.onSurface,
-                fontWeight: FontWeight.w500,
-                fontSize: 20,
+            Icon(icon, size: 22, color: color.withValues(alpha: 0.7)),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                title,
+                style: textTheme.body?.copyWith(
+                  color: color,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16,
+                ),
               ),
             ),
-            const SizedBox(width: 8),
-            icon,
+            if (trailing != null) trailing!,
           ],
         ),
       ),

@@ -30,10 +30,29 @@ class AuthenticatedClient extends http.BaseClient {
     final response = await _inner.send(request);
 
     if (response.statusCode == 401) {
-      _authService.signOut();
+      final newToken = await _authService.refreshAccessToken();
+
+      if (newToken != null) {
+        final retryRequest = _copyRequest(request, newToken);
+        return _inner.send(retryRequest);
+      }
+
+      await _authService.signOut();
     }
 
     return response;
+  }
+
+  http.BaseRequest _copyRequest(http.BaseRequest original, String newToken) {
+    final retry = http.Request(original.method, original.url)
+      ..headers.addAll(original.headers);
+
+    if (original is http.Request) {
+      retry.body = original.body;
+    }
+
+    retry.headers['Authorization'] = 'Bearer $newToken';
+    return retry;
   }
 
   @override
