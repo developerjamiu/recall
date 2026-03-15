@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/src/shared/theme/app_colors.dart';
-import 'package:google_fonts/google_fonts.dart';
 
-class GlobeTextTheme extends ThemeExtension<GlobeTextTheme> {
+class RecallTextTheme extends ThemeExtension<RecallTextTheme> {
   final TextStyle? heading1;
   final TextStyle? heading2;
   final TextStyle? heading3;
@@ -15,7 +14,7 @@ class GlobeTextTheme extends ThemeExtension<GlobeTextTheme> {
   final TextStyle? smallBody;
   final TextStyle? bodyLight;
 
-  const GlobeTextTheme({
+  const RecallTextTheme({
     this.heading1,
     this.heading2,
     this.heading3,
@@ -29,126 +28,162 @@ class GlobeTextTheme extends ThemeExtension<GlobeTextTheme> {
     this.bodyLight,
   });
 
-  GlobeTextTheme.light()
-    : heading1 = GoogleFonts.outfit(
+  RecallTextTheme.light()
+    : heading1 = TextStyle(
+        fontFamily: 'Satoshi',
         fontSize: 60,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w900,
         height: 68.0.toDesignHeight(60),
         color: AppColors.colourBlack,
       ),
-      heading2 = GoogleFonts.outfit(
+      heading2 = TextStyle(
+        fontFamily: 'Satoshi',
         fontSize: 48,
         height: 120.0.toDesignHeight(48),
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w900,
         color: AppColors.colourBlack,
       ),
-      heading3 = GoogleFonts.outfit(
+      heading3 = TextStyle(
+        fontFamily: 'Satoshi',
         fontSize: 36,
         height: 120.0.toDesignHeight(36),
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w900,
         color: AppColors.colourBlack,
       ),
-      heading4 = GoogleFonts.outfit(
+      heading4 = TextStyle(
+        fontFamily: 'Satoshi',
         fontSize: 30,
         height: 24.0.toDesignHeight(30),
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w900,
         color: AppColors.colourBlack,
       ),
-      heading5 = GoogleFonts.outfit(
+      heading5 = TextStyle(
+        fontFamily: 'Satoshi',
         fontSize: 24,
         height: 24.0.toDesignHeight(24),
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w900,
         color: AppColors.colourBlack,
       ),
-      heading6 = GoogleFonts.outfit(
+      heading6 = TextStyle(
+        fontFamily: 'Satoshi',
         fontSize: 20,
         height: 24.0.toDesignHeight(20),
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w900,
         color: AppColors.colourBlack,
       ),
-      label = GoogleFonts.chivoMono(
+      label = TextStyle(
+        fontFamily: 'Satoshi',
         fontSize: 14,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w700,
         color: AppColors.colourBlack,
       ),
-      bodyLarge = GoogleFonts.inter(
+      bodyLarge = TextStyle(
+        fontFamily: 'Satoshi',
         fontSize: 16,
         height: 24.0.toDesignHeight(16),
+        fontWeight: FontWeight.w400,
         color: AppColors.colourBlack,
       ),
-      body = GoogleFonts.inter(
+      body = TextStyle(
+        fontFamily: 'Satoshi',
         fontSize: 14,
         height: 24.0.toDesignHeight(14),
+        fontWeight: FontWeight.w400,
         color: AppColors.colourBlack,
       ),
-      smallBody = GoogleFonts.inter(
+      smallBody = TextStyle(
+        fontFamily: 'Satoshi',
         fontSize: 10,
         height: 16.0.toDesignHeight(10),
+        fontWeight: FontWeight.w400,
         color: AppColors.colourBlack,
       ),
-      bodyLight = GoogleFonts.inter(fontSize: 14, color: AppColors.colourBlack);
+      bodyLight = TextStyle(
+        fontFamily: 'Satoshi',
+        fontSize: 14,
+        fontWeight: FontWeight.w300,
+        color: AppColors.colourBlack,
+      );
 
-  GlobeTextTheme.dark()
-    : heading1 = GoogleFonts.outfit(
+  RecallTextTheme.dark()
+    : heading1 = TextStyle(
+        fontFamily: 'Satoshi',
         fontSize: 60,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w900,
         height: 68.0.toDesignHeight(60),
         color: AppColors.colourWhite,
       ),
-      heading2 = GoogleFonts.outfit(
+      heading2 = TextStyle(
+        fontFamily: 'Satoshi',
         fontSize: 48,
         height: 120.0.toDesignHeight(48),
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w900,
         color: AppColors.colourWhite,
       ),
-      heading3 = GoogleFonts.outfit(
+      heading3 = TextStyle(
+        fontFamily: 'Satoshi',
         fontSize: 36,
         height: 120.0.toDesignHeight(36),
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w900,
         color: AppColors.colourWhite,
       ),
-      heading4 = GoogleFonts.outfit(
+      heading4 = TextStyle(
+        fontFamily: 'Satoshi',
         fontSize: 30,
         height: 24.0.toDesignHeight(30),
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w900,
         color: AppColors.colourWhite,
       ),
-      heading5 = GoogleFonts.outfit(
+      heading5 = TextStyle(
+        fontFamily: 'Satoshi',
         fontSize: 24,
         height: 24.0.toDesignHeight(24),
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w900,
         color: AppColors.colourWhite,
       ),
-      heading6 = GoogleFonts.outfit(
+      heading6 = TextStyle(
+        fontFamily: 'Satoshi',
         fontSize: 20,
         height: 24.0.toDesignHeight(20),
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w900,
         color: AppColors.colourWhite,
       ),
-      label = GoogleFonts.chivoMono(
+      label = TextStyle(
+        fontFamily: 'Satoshi',
         fontSize: 14,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w700,
         color: AppColors.colourWhite,
       ),
-      bodyLarge = GoogleFonts.inter(
+      bodyLarge = TextStyle(
+        fontFamily: 'Satoshi',
         fontSize: 16,
         height: 24.0.toDesignHeight(16),
+        fontWeight: FontWeight.w400,
         color: AppColors.colourWhite,
       ),
-      body = GoogleFonts.inter(
+      body = TextStyle(
+        fontFamily: 'Satoshi',
         fontSize: 14,
         height: 24.0.toDesignHeight(14),
+        fontWeight: FontWeight.w400,
         color: AppColors.colourWhite,
       ),
-      smallBody = GoogleFonts.inter(
+      smallBody = TextStyle(
+        fontFamily: 'Satoshi',
         fontSize: 10,
         height: 16.0.toDesignHeight(10),
+        fontWeight: FontWeight.w400,
         color: AppColors.colourWhite,
       ),
-      bodyLight = GoogleFonts.inter(fontSize: 14, color: AppColors.colourWhite);
+      bodyLight = TextStyle(
+        fontFamily: 'Satoshi',
+        fontSize: 14,
+        fontWeight: FontWeight.w300,
+        color: AppColors.colourWhite,
+      );
 
   @override
-  GlobeTextTheme copyWith({
+  RecallTextTheme copyWith({
     TextStyle? heading1,
     TextStyle? heading2,
     TextStyle? heading3,
@@ -161,7 +196,7 @@ class GlobeTextTheme extends ThemeExtension<GlobeTextTheme> {
     TextStyle? smallBody,
     TextStyle? bodyLight,
   }) {
-    return GlobeTextTheme(
+    return RecallTextTheme(
       heading1: heading1 ?? this.heading1,
       heading2: heading2 ?? this.heading2,
       heading3: heading3 ?? this.heading3,
@@ -177,9 +212,9 @@ class GlobeTextTheme extends ThemeExtension<GlobeTextTheme> {
   }
 
   @override
-  GlobeTextTheme lerp(covariant GlobeTextTheme? other, double t) {
-    if (other is! GlobeTextTheme) return this;
-    return GlobeTextTheme(
+  RecallTextTheme lerp(covariant RecallTextTheme? other, double t) {
+    if (other is! RecallTextTheme) return this;
+    return RecallTextTheme(
       heading1: TextStyle.lerp(heading1, other.heading1, t),
       heading2: TextStyle.lerp(heading2, other.heading2, t),
       heading3: TextStyle.lerp(heading3, other.heading3, t),

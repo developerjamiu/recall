@@ -17,8 +17,8 @@ class ActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = GlobeTheme.of(context).textTheme;
-    final colorScheme = GlobeTheme.of(context).colorScheme;
+    final textTheme = RecallTheme.of(context).textTheme;
+    final colorScheme = RecallTheme.of(context).colorScheme;
 
     return OutlinedButton.icon(
       style: OutlinedButton.styleFrom(

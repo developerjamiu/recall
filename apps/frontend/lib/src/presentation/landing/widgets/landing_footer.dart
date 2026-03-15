@@ -8,7 +8,9 @@ class LandingFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = GlobeTheme.of(context).textTheme;
+    final textTheme = RecallTheme.of(context).textTheme;
+    final colorScheme = RecallTheme.of(context).colorScheme;
+    final muted = colorScheme.onSurface.withValues(alpha: 0.45);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
@@ -16,18 +18,11 @@ class LandingFooter extends StatelessWidget {
         children: [
           if (!context.isMobile) ...[
             const SocialIcons(),
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
           ],
-          Wrap(
-            alignment: WrapAlignment.center,
-            spacing: 24,
-            children: [
-              Text('Recall, built by Globe.', style: textTheme.body),
-              Text(
-                '© 2025 Dart Globe. All rights reserved.',
-                style: textTheme.body,
-              ),
-            ],
+          Text(
+            '© 2025 Developer Jamiu. All rights reserved.',
+            style: textTheme.smallBody?.copyWith(color: muted, fontSize: 12),
           ),
         ],
       ),

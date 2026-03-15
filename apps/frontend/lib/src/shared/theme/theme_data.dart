@@ -2,39 +2,39 @@ import 'package:flutter/material.dart';
 import 'package:frontend/src/shared/theme/color_scheme.dart';
 import 'package:frontend/src/shared/theme/text_theme.dart';
 
-class GlobeTheme extends ThemeExtension<GlobeTheme> {
-  final GlobeTextTheme textTheme;
-  final GlobeColorScheme colorScheme;
+class RecallTheme extends ThemeExtension<RecallTheme> {
+  final RecallTextTheme textTheme;
+  final RecallColorScheme colorScheme;
 
-  const GlobeTheme({required this.textTheme, required this.colorScheme});
+  const RecallTheme({required this.textTheme, required this.colorScheme});
 
-  static GlobeTheme of(BuildContext context) {
-    return Theme.of(context).extension<GlobeTheme>()!;
+  static RecallTheme of(BuildContext context) {
+    return Theme.of(context).extension<RecallTheme>()!;
   }
 
-  GlobeTheme.light()
-    : textTheme = GlobeTextTheme.light(),
-      colorScheme = GlobeColorScheme.light();
+  RecallTheme.light()
+    : textTheme = RecallTextTheme.light(),
+      colorScheme = RecallColorScheme.light();
 
-  GlobeTheme.dark()
-    : textTheme = GlobeTextTheme.dark(),
-      colorScheme = GlobeColorScheme.dark();
+  RecallTheme.dark()
+    : textTheme = RecallTextTheme.dark(),
+      colorScheme = RecallColorScheme.dark();
 
   @override
-  GlobeTheme copyWith({
-    GlobeTextTheme? textTheme,
-    GlobeColorScheme? colorScheme,
+  RecallTheme copyWith({
+    RecallTextTheme? textTheme,
+    RecallColorScheme? colorScheme,
   }) {
-    return GlobeTheme(
+    return RecallTheme(
       textTheme: textTheme ?? this.textTheme,
       colorScheme: colorScheme ?? this.colorScheme,
     );
   }
 
   @override
-  GlobeTheme lerp(covariant GlobeTheme? other, double t) {
-    if (other is! GlobeTheme) return this;
-    return GlobeTheme(
+  RecallTheme lerp(covariant RecallTheme? other, double t) {
+    if (other is! RecallTheme) return this;
+    return RecallTheme(
       textTheme: textTheme.lerp(other.textTheme, t),
       colorScheme: colorScheme.lerp(other.colorScheme, t),
     );

@@ -1,24 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/src/shared/theme/theme_data.dart';
 import 'package:frontend/src/shared/widgets/app_icon.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class RecallLogo extends StatelessWidget {
   const RecallLogo({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = GlobeTheme.of(context).colorScheme;
+    final colorScheme = RecallTheme.of(context).colorScheme;
 
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        AppIcon.recall(size: 34),
+        AppIcon.recall(size: 28),
+        const SizedBox(width: 4),
         Text(
           'Recall',
-          style: GoogleFonts.outfit(
+          style: TextStyle(
+            fontFamily: 'Satoshi',
             color: colorScheme.onSurface,
             fontSize: 20,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w700,
+            letterSpacing: -0.5,
           ),
         ),
       ],

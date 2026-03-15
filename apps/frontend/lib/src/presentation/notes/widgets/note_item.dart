@@ -15,26 +15,47 @@ class NoteItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = GlobeTheme.of(context).textTheme;
-    final colorScheme = GlobeTheme.of(context).colorScheme;
+    final textTheme = RecallTheme.of(context).textTheme;
+    final colorScheme = RecallTheme.of(context).colorScheme;
 
-    return SizedBox(
-      width: double.infinity,
-      child: Material(
-        color: isSelected
-            ? colorScheme.primary.withValues(alpha: 0.1)
-            : Colors.transparent,
-        child: InkWell(
-          onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            child: Text(
-              title,
-              style: textTheme.body?.copyWith(
-                color: isSelected ? colorScheme.primary : colorScheme.onSurface,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+    return Material(
+      color: isSelected
+          ? colorScheme.primary.withValues(alpha: 0.12)
+          : Colors.transparent,
+      borderRadius: BorderRadius.circular(8),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(8),
+        hoverColor: colorScheme.primary.withValues(alpha: 0.06),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          child: Row(
+            children: [
+              if (isSelected)
+                Container(
+                  width: 3,
+                  height: 16,
+                  margin: const EdgeInsets.only(right: 8),
+                  decoration: BoxDecoration(
+                    color: colorScheme.primary,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              Expanded(
+                child: Text(
+                  title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: textTheme.body?.copyWith(
+                    color: isSelected
+                        ? colorScheme.primary
+                        : colorScheme.onSurface,
+                    fontWeight:
+                        isSelected ? FontWeight.w600 : FontWeight.normal,
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
         ),
       ),

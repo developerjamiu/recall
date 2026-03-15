@@ -89,45 +89,106 @@ class _MobileNoteTextEditorState extends State<MobileNoteTextEditor> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = GlobeTheme.of(context).colorScheme;
-    final textTheme = GlobeTheme.of(context).textTheme;
+    final colorScheme = RecallTheme.of(context).colorScheme;
+    final textTheme = RecallTheme.of(context).textTheme;
 
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.4,
-      decoration: BoxDecoration(
-        border: Border.all(color: colorScheme.outline),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      child: QuillEditor.basic(
-        controller: _controller,
-        focusNode: _focusNode,
-        config: QuillEditorConfig(
-          padding: EdgeInsets.zero,
-          scrollable: true,
-          autoFocus: false,
-          expands: false,
-          placeholder: 'Start writing...',
-          customStyles: DefaultStyles(
-            placeHolder: DefaultTextBlockStyle(
-              textTheme.bodyLarge!.copyWith(
-                color: colorScheme.onSurface.withValues(alpha: 0.5),
+    return Column(
+      children: [
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: QuillEditor.basic(
+              controller: _controller,
+              focusNode: _focusNode,
+              config: QuillEditorConfig(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                scrollable: true,
+                autoFocus: false,
+                expands: true,
+                placeholder: 'Start writing...',
+                customStyles: DefaultStyles(
+                  placeHolder: DefaultTextBlockStyle(
+                    textTheme.bodyLarge!.copyWith(
+                      color: colorScheme.onSurface.withValues(alpha: 0.35),
+                    ),
+                    const HorizontalSpacing(0, 0),
+                    const VerticalSpacing(6, 0),
+                    const VerticalSpacing(0, 0),
+                    null,
+                  ),
+                  paragraph: DefaultTextBlockStyle(
+                    textTheme.bodyLarge!.copyWith(
+                      color: colorScheme.onSurface,
+                      height: 1.6,
+                    ),
+                    const HorizontalSpacing(0, 0),
+                    const VerticalSpacing(6, 0),
+                    const VerticalSpacing(0, 0),
+                    null,
+                  ),
+                ),
               ),
-              const HorizontalSpacing(0, 0),
-              const VerticalSpacing(6, 0),
-              const VerticalSpacing(0, 0),
-              null,
-            ),
-            paragraph: DefaultTextBlockStyle(
-              textTheme.bodyLarge!,
-              const HorizontalSpacing(0, 0),
-              const VerticalSpacing(6, 0),
-              const VerticalSpacing(0, 0),
-              null,
             ),
           ),
         ),
-      ),
+        Container(
+          decoration: BoxDecoration(
+            color: colorScheme.background,
+            border: Border(
+              top: BorderSide(
+                color: colorScheme.outline.withValues(alpha: 0.2),
+              ),
+            ),
+          ),
+          child: SafeArea(
+            top: false,
+            child: QuillSimpleToolbar(
+              controller: _controller,
+              config: QuillSimpleToolbarConfig(
+                multiRowsDisplay: false,
+                showAlignmentButtons: false,
+                showBackgroundColorButton: false,
+                showCenterAlignment: false,
+                showCodeBlock: false,
+                showDirection: false,
+                showFontFamily: false,
+                showFontSize: false,
+                showIndent: false,
+                showInlineCode: false,
+                showJustifyAlignment: false,
+                showLeftAlignment: false,
+                showRightAlignment: false,
+                showSearchButton: false,
+                showSubscript: false,
+                showSuperscript: false,
+                showColorButton: false,
+                showSmallButton: false,
+                showLink: false,
+                showQuote: true,
+                showHeaderStyle: false,
+                showListBullets: true,
+                showListNumbers: true,
+                showListCheck: false,
+                showStrikeThrough: false,
+                showUndo: true,
+                showRedo: true,
+                buttonOptions: QuillSimpleToolbarButtonOptions(
+                  base: QuillToolbarBaseButtonOptions(
+                    iconTheme: QuillIconTheme(
+                      iconButtonSelectedData: IconButtonData(
+                        color: colorScheme.primary,
+                      ),
+                      iconButtonUnselectedData: IconButtonData(
+                        color: colorScheme.onSurface.withValues(alpha: 0.6),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 

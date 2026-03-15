@@ -18,7 +18,8 @@ class AuthService {
   final NativeStorage _storage;
 
   String get _baseUrl => Environment.apiUrl;
-  static const String _tokenKey = 'access_token';
+  static const String _accessTokenKey = 'access_token';
+  static const String _refreshTokenKey = 'refresh_token';
 
   Future<void> signInWithGoogle() async {
     final response = await _http.get(
@@ -52,9 +53,62 @@ class AuthService {
     await launchUrl(Uri.parse(authUrl), webOnlyWindowName: '_self');
   }
 
-  void saveToken(String token) => _storage.write(_tokenKey, token);
+  void saveTokens({required String accessToken, String? refreshToken}) {
+    _storage.write(_accessTokenKey, accessToken);
+    if (refreshToken != null) {
+      _storage.write(_refreshTokenKey, refreshToken);
+    }
+  }
 
-  void signOut() => _storage.delete(_tokenKey);
+  Future<void> signOut() async {
+    final refreshToken = getRefreshToken();
 
-  String? getToken() => _storage.read(_tokenKey);
+    if (refreshToken != null) {
+      try {
+        await _http.post(
+          Uri.parse('$_baseUrl/auth/logout'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({'refreshToken': refreshToken}),
+        );
+      } catch (_) {}
+    }
+
+    _storage.delete(_accessTokenKey);
+    _storage.delete(_refreshTokenKey);
+  }
+
+  String? getToken() => _storage.read(_accessTokenKey);
+
+  String? getRefreshToken() => _storage.read(_refreshTokenKey);
+
+  Future<String?> refreshAccessToken() async {
+    final refreshToken = getRefreshToken();
+    if (refreshToken == null) return null;
+
+    try {
+      final response = await _http.post(
+        Uri.parse('$_baseUrl/auth/refresh'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'refreshToken': refreshToken}),
+      );
+
+      if (response.statusCode != 200) {
+        _storage.delete(_accessTokenKey);
+        _storage.delete(_refreshTokenKey);
+        return null;
+      }
+
+      final data = jsonDecode(response.body) as Map<String, dynamic>;
+      final responseData = data['data'] as Map<String, dynamic>;
+
+      final newAccessToken = responseData['accessToken'] as String;
+      final newRefreshToken = responseData['refreshToken'] as String;
+
+      saveTokens(accessToken: newAccessToken, refreshToken: newRefreshToken);
+
+      return newAccessToken;
+    } catch (_) {
+      return null;
+    }
+  }
 }

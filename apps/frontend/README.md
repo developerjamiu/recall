@@ -1,35 +1,13 @@
 # Recall Frontend
 
-A Flutter web application for the Recall notes platform, showcasing modern Flutter development practices, responsive design, and full-stack Dart integration.
+A Flutter web application for Recall — a notes app showcasing full-stack Dart. Features responsive desktop/mobile layouts, OAuth authentication, a rich text editor (Flutter Quill), auto-save, keyboard shortcuts, and dark/light theme support.
 
-## 🏗️ Architecture
-
-The frontend is built with Flutter and follows a clean architecture pattern:
-
-```
-frontend/
-├── lib/
-│   ├── src/
-│   │   ├── config/           # Environment configuration
-│   │   ├── models/           # Data models
-│   │   ├── presentation/     # UI layer
-│   │   │   ├── landing/      # Landing page
-│   │   │   └── notes/        # Notes management
-│   │   ├── providers/        # State management (Riverpod)
-│   │   ├── services/         # Business logic
-│   │   └── shared/           # Shared components
-│   └── main.dart             # App entry point
-├── assets/                   # Static assets
-└── web/                      # Web-specific files
-```
-
-## 🚀 Quick Start
-
-### Prerequisites
+## Prerequisites
 
 - [Flutter SDK](https://flutter.dev/docs/get-started/install) ^3.9.0
-- [Dart SDK](https://dart.dev/get-dart) ^3.9.0
-- A modern web browser
+- A running backend (see [backend](../backend/README.md) or [shelf_backend](../shelf_backend/README.md))
+
+## Getting Started
 
 ### 1. Install Dependencies
 
@@ -37,313 +15,198 @@ frontend/
 flutter pub get
 ```
 
-### 2. Configure API URL
-
-The frontend connects to the backend API. By default, it connects to `http://localhost:8080` for local development.
-
-For production or custom backend:
+### 2. Run the Application
 
 ```bash
-# Set custom API URL
-flutter run -d web-server --web-port 3000 --dart-define=API_URL=https://your-api-url.com
+flutter run -d chrome --web-port 3000
 ```
 
-### 3. Run the Application
+The app runs at `http://localhost:3000` and connects to the backend at `http://localhost:8080` by default.
+
+### 3. Custom API URL
 
 ```bash
-# Development mode
-flutter run -d web-server --web-port 3000
-
-# With hot reload
-flutter run -d web-server --web-port 3000 --hot
+flutter run -d chrome --web-port 3000 --dart-define=API_URL=https://your-api-url.com
 ```
-
-The app will be available at `http://localhost:3000`
 
 ### 4. Build for Production
 
 ```bash
-# Build for web
-flutter build web
-
-# Build with custom API URL
-flutter build web --dart-define=API_URL=https://recall-api.globeapp.dev
+flutter build web --dart-define=API_URL=https://your-api-url.com
 ```
 
-## 🎨 Features
+## Project Structure
 
-### ✅ Implemented Features
+```
+apps/frontend/
+├── lib/
+│   ├── main.dart                           # App entry point, MaterialApp.router setup
+│   └── src/
+│       ├── config/
+│       │   └── environment.dart            # API_URL from dart-define
+│       ├── models/
+│       │   └── edit_note_params.dart       # Note editing parameters
+│       ├── presentation/
+│       │   ├── landing/                    # Landing / sign-in page
+│       │   │   ├── pages/
+│       │   │   │   └── landing_page.dart
+│       │   │   └── widgets/
+│       │   │       ├── desktop_landing_content.dart
+│       │   │       ├── mobile_landing_content.dart
+│       │   │       ├── landing_header.dart
+│       │   │       ├── landing_hero.dart
+│       │   │       ├── landing_footer.dart
+│       │   │       ├── sign_in_card.dart
+│       │   │       ├── terms_and_condition.dart
+│       │   │       └── theme_toggle.dart
+│       │   └── notes/                      # Notes management
+│       │       ├── pages/
+│       │       │   ├── note_page.dart              # Desktop/mobile router
+│       │       │   ├── mobile_notes_list_page.dart # Mobile notes list
+│       │       │   └── mobile_note_editor_page.dart # Mobile editor
+│       │       └── widgets/
+│       │           ├── desktop_note_content.dart    # Desktop split view
+│       │           ├── note_sidebar.dart            # Desktop sidebar
+│       │           ├── my_notes_section.dart        # Notes list in sidebar
+│       │           ├── note_item.dart               # Desktop note list item
+│       │           ├── mobile_note_item.dart        # Mobile note card
+│       │           ├── mobile_empty_notes.dart      # Mobile empty state
+│       │           ├── note_content_area.dart       # Editor container
+│       │           ├── note_header.dart             # Title + actions bar
+│       │           ├── title_section.dart           # Editable title field
+│       │           ├── note_text_editor.dart        # Desktop Quill editor
+│       │           ├── mobile_note_text_editor.dart # Mobile Quill editor
+│       │           ├── toolbar_and_actions.dart     # Desktop toolbar + actions
+│       │           ├── toolbar_button.dart          # Individual toolbar button
+│       │           ├── action_buttons.dart          # Delete button
+│       │           ├── save_status_indicator.dart   # Auto-save status display
+│       │           ├── delete_confirmation_dialog.dart
+│       │           ├── note_menu.dart               # Mobile bottom sheet menu
+│       │           ├── notes_app_bar.dart           # Mobile app bar
+│       │           ├── note_footer.dart             # Desktop footer
+│       │           ├── account_dropdown.dart        # User account menu
+│       │           └── large_button.dart            # New note button
+│       ├── providers/
+│       │   ├── auth_provider.dart          # Auth state (Riverpod)
+│       │   ├── notes_provider.dart         # Notes list state
+│       │   ├── selected_note_provider.dart # Currently selected/editing note
+│       │   ├── note_mutations.dart         # Create, save, delete mutations
+│       │   ├── auto_save_provider.dart     # 2-second debounced auto-save
+│       │   └── theme_provider.dart         # Light/dark mode toggle
+│       ├── services/
+│       │   ├── auth_service.dart           # OAuth sign-in, token management
+│       │   ├── authenticated_client.dart   # HTTP client with JWT + refresh
+│       │   ├── notes_service.dart          # Notes API calls
+│       │   ├── user_service.dart           # User profile API
+│       │   └── theme_service.dart          # Theme persistence
+│       └── shared/
+│           ├── extensions/
+│           │   └── responsivex.dart        # context.isMobile breakpoint
+│           ├── router/
+│           │   └── app_router.dart         # GoRouter config with all routes
+│           ├── theme/
+│           │   ├── app_colors.dart         # Brand color palette
+│           │   ├── color_scheme.dart       # Light/dark color schemes
+│           │   ├── text_theme.dart         # Satoshi font typography
+│           │   └── theme_data.dart         # RecallTheme InheritedWidget
+│           ├── utils/
+│           │   ├── note_validation.dart    # Title/content validation
+│           │   └── snackbar_utils.dart     # Success/error snackbar helpers
+│           └── widgets/
+│               ├── action_button.dart      # Styled text button
+│               ├── app_icon.dart           # SVG icon factory
+│               ├── error_state.dart        # Error + retry widget
+│               ├── keyboard_shortcuts.dart # Ctrl+N, Ctrl+S, etc.
+│               ├── loading_indicator.dart  # Centered spinner
+│               ├── recall_logo.dart        # Brand logo widget
+│               ├── skeleton_loader.dart    # Shimmer loading placeholders
+│               ├── social_icon.dart        # Clickable social link
+│               └── social_icons.dart       # Footer social links row
+├── assets/
+│   ├── fonts/                              # Satoshi font files (.otf)
+│   └── icons/                              # SVG icons
+├── web/
+│   └── index.html                          # Web entry point
+├── test/
+│   └── widget_test.dart
+└── pubspec.yaml
+```
 
-- **Responsive Design**: Works seamlessly on desktop and mobile
-- **Authentication**: OAuth 2.0 with Google and GitHub
-- **Notes Management**: Create, edit, delete, and organize notes
-- **Rich Text Editor**: Powered by Flutter Quill
-- **Dark/Light Theme**: Theme switching with system preference detection
-- **Cross-Device Sync**: Notes sync across devices via API
-- **User Profile**: Profile management with OAuth providers
-- **Mobile-First**: Optimized mobile experience
+## Key Features
 
-### 🚧 Coming Soon
+### Responsive Layout
+- **Desktop** (>= 768px): Sidebar with notes list + editor split view
+- **Mobile** (< 768px): Separate list and editor pages with slide transitions
 
-- **AI Features**: AI-powered note assistance
-- **Collaboration**: Share notes with other users
-- **Export/Import**: Export notes in various formats
-- **Search**: Full-text search across notes
-- **Categories**: Organize notes with tags and categories
+### Auto-Save
+Notes are automatically saved 2 seconds after the last keystroke. A status indicator shows "Saving..." / "Saved" / "Save failed".
 
-## 🛠️ Development
+### Rich Text Editor
+Powered by [Flutter Quill](https://pub.dev/packages/flutter_quill) with formatting toolbar (bold, italic, underline, lists, quotes, undo/redo). Content is stored as Quill Delta JSON.
 
-### Project Structure
+### Keyboard Shortcuts
+- `Ctrl+N` — New note
+- `Ctrl+S` — Save note
+- `Escape` — Deselect note
+- `Delete` — Delete note
 
-#### State Management (Riverpod)
+### Authentication
+OAuth 2.0 via Google or GitHub. Tokens are stored in native storage with automatic refresh on expiry.
 
+### Routing
+[GoRouter](https://pub.dev/packages/go_router) with deep linking:
+- `/` — Landing page
+- `/auth/callback` — OAuth callback
+- `/notes` — Notes list/editor
+- `/notes/edit` — Mobile editor (new note)
+- `/notes/:id` — Deep link to specific note
+
+## Design System
+
+### Colors
+- **Primary**: Bondi Blue `#00A3AF`
+- **Secondary**: Skobeloff `#00727A`
+- **Accent**: Atomic Tangerine `#FFA368`
+- **Surfaces**: Neutral greys (no teal tint)
+
+### Typography
+[Satoshi](https://www.fontshare.com/fonts/satoshi) font family at weights 300–900.
+
+### Theme
+Access via `RecallTheme.of(context)`:
 ```dart
-// Providers for different features
-providers/
-├── auth_provider.dart          # Authentication state
-├── notes_provider.dart         # Notes management
-├── selected_note_provider.dart # Currently selected note
-├── note_mutations.dart         # Note CRUD operations
-└── theme_provider.dart         # Theme management
+final colorScheme = RecallTheme.of(context).colorScheme;
+final textTheme = RecallTheme.of(context).textTheme;
 ```
 
-#### UI Components
+## Dependencies
 
-```dart
-// Shared components
-shared/
-├── widgets/                    # Reusable widgets
-├── theme/                      # Theme configuration
-├── router/                     # Navigation setup
-└── utils/                      # Utility functions
-```
+| Package | Purpose |
+|---------|---------|
+| `flutter_riverpod` | State management |
+| `go_router` | Declarative routing with deep links |
+| `flutter_quill` | Rich text editor |
+| `flutter_svg` | SVG icon rendering |
+| `http` | HTTP client |
+| `native_storage` | Persistent token storage |
+| `url_launcher` | Opening OAuth URLs |
+| `timeago` | Relative date formatting |
+| `dart_mappable` | JSON serialization |
+| `common` | Shared data classes |
 
-#### Feature Modules
-
-```dart
-// Feature-specific UI
-presentation/
-├── landing/                    # Landing page
-│   ├── pages/
-│   └── widgets/
-└── notes/                      # Notes management
-    ├── pages/
-    └── widgets/
-```
-
-### Code Generation
-
-The project uses code generation for:
-
-- JSON serialization (Dart Mappable)
-- Model mapping
+## Testing
 
 ```bash
-# Generate code
-dart run build_runner build
-
-# Watch for changes
-dart run build_runner watch
-```
-
-### Code Style
-
-The project uses [Lints](https://pub.dev/packages/lints) for code analysis.
-
-```bash
-# Run linter
-flutter analyze
-
-# Fix issues
-dart fix --apply
-```
-
-## 🧪 Testing
-
-### Run Tests
-
-```bash
-# Run all tests
 flutter test
-
-# Run tests with coverage
-flutter test --coverage
 ```
 
-### Test Structure
+## Troubleshooting
 
-```
-test/
-└── widget_test.dart           # Widget tests
-```
+**CORS errors:** Ensure the backend's CORS config allows `http://localhost:3000`.
 
-## 🎨 Theming
+**OAuth redirect fails:** The backend's `CLIENT_URL` must match the frontend's URL (e.g. `http://localhost:3000`).
 
-The app supports both light and dark themes with a custom theme system:
-
-### Theme Configuration
-
-```dart
-// Custom theme colors and typography
-shared/theme/
-├── app_colors.dart            # Color definitions
-├── color_scheme.dart          # Material color schemes
-├── text_theme.dart            # Typography
-└── theme_data.dart            # Theme configuration
-```
-
-### Using Themes
-
-```dart
-// Access theme in widgets
-final theme = GlobeTheme.of(context);
-final colorScheme = theme.colorScheme;
-final textTheme = theme.textTheme;
-```
-
-## 📱 Responsive Design
-
-The app is fully responsive and adapts to different screen sizes:
-
-### Breakpoints
-
-- **Mobile**: < 768px
-- **Desktop**: ≥ 768px
-
-### Responsive Utilities
-
-```dart
-// Check screen size
-if (context.isMobile) {
-  // Mobile-specific UI
-} else {
-  // Desktop-specific UI
-}
-```
-
-## 🔌 API Integration
-
-### Services
-
-```dart
-services/
-├── auth_service.dart          # Authentication
-├── notes_service.dart         # Notes API
-├── user_service.dart          # User management
-└── authenticated_client.dart  # HTTP client with auth
-```
-
-### API Configuration
-
-```dart
-// Environment configuration
-class Environment {
-  static const String apiUrl = String.fromEnvironment(
-    'API_URL',
-    defaultValue: 'http://localhost:8080',
-  );
-}
-```
-
-## 🚀 Deployment
-
-### Local Development
-
+**Build errors after changes:**
 ```bash
-flutter run -d web-server --web-port 3000
+flutter clean && flutter pub get
 ```
-
-### Production Build
-
-```bash
-flutter build web --release
-```
-
-### Globe Platform Deployment
-
-The frontend is deployed on Globe Platform at `https://recall.globeapp.dev`
-
-## 📦 Dependencies
-
-### Core Dependencies
-
-- `flutter` - UI framework
-- `flutter_riverpod` - State management
-- `go_router` - Navigation
-- `flutter_quill` - Rich text editor
-- `http` - HTTP client
-- `url_launcher` - URL handling
-
-### UI Dependencies
-
-- `google_fonts` - Typography
-- `flutter_svg` - SVG support
-- `native_storage` - Local storage
-
-### Development Dependencies
-
-- `flutter_test` - Testing framework
-- `lints` - Code analysis
-
-## 🔧 Configuration
-
-### Environment Variables
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `API_URL` | Backend API URL | `http://localhost:8080` |
-
-### Build Configuration
-
-```bash
-# Custom API URL
-flutter build web --dart-define=API_URL=https://recall-api.globeapp.dev
-
-# Release build
-flutter build web --release
-```
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-#### Hot Reload Not Working
-
-```bash
-# Restart with hot reload
-flutter run -d web-server --web-port 3000 --hot
-```
-
-#### Build Issues
-
-```bash
-# Clean and rebuild
-flutter clean
-flutter pub get
-flutter build web
-```
-
-#### API Connection Issues
-
-1. Verify backend is running
-2. Check API URL configuration
-3. Ensure CORS is properly configured
-
-## 📱 Browser Support
-
-- Chrome (recommended)
-- Firefox
-- Safari
-- Edge
-
-## 🤝 Contributing
-
-1. Follow Flutter best practices
-2. Maintain responsive design
-3. Add tests for new features
-4. Update documentation
-5. Ensure accessibility compliance
-
-## 📄 License
-
-This project is licensed under the MIT License.

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/src/shared/theme/app_colors.dart';
 
-class GlobeColorScheme extends ThemeExtension<GlobeColorScheme> {
+class RecallColorScheme extends ThemeExtension<RecallColorScheme> {
   final Color background;
   final Color surface;
   final Color onSurface;
@@ -12,8 +12,9 @@ class GlobeColorScheme extends ThemeExtension<GlobeColorScheme> {
   final Color error;
   final Color onError;
   final Color outline;
+  final Color accent;
 
-  const GlobeColorScheme({
+  const RecallColorScheme({
     required this.background,
     required this.surface,
     required this.onSurface,
@@ -24,34 +25,37 @@ class GlobeColorScheme extends ThemeExtension<GlobeColorScheme> {
     required this.error,
     required this.onError,
     required this.outline,
+    required this.accent,
   });
 
-  GlobeColorScheme.light()
+  RecallColorScheme.light()
     : background = AppColors.colourWhite,
-      surface = AppColors.grey.shade50,
+      surface = const Color(0xFFF8F8F8),
       onSurface = AppColors.colourBlack,
-      primary = AppColors.purple,
+      primary = AppColors.primary,
       onPrimary = AppColors.colourWhite,
-      secondary = AppColors.grey,
+      secondary = AppColors.secondary,
       onSecondary = AppColors.colourBlack,
       error = const Color(0xFFED1F15),
       onError = AppColors.colourWhite,
-      outline = AppColors.grey.shade400;
+      outline = const Color(0xFFD8D8D8),
+      accent = AppColors.accent;
 
-  GlobeColorScheme.dark()
+  RecallColorScheme.dark()
     : background = AppColors.colourBlack,
-      surface = AppColors.grey.shade900,
+      surface = const Color(0xFF1A1A1A),
       onSurface = AppColors.colourWhite,
-      primary = AppColors.purple,
+      primary = AppColors.primary,
       onPrimary = AppColors.colourWhite,
-      secondary = AppColors.grey,
+      secondary = AppColors.secondary,
       onSecondary = AppColors.colourBlack,
       error = const Color(0xFFED1F15),
       onError = AppColors.colourWhite,
-      outline = AppColors.grey.shade800;
+      outline = const Color(0xFF2A2A2A),
+      accent = AppColors.accent;
 
   @override
-  GlobeColorScheme copyWith({
+  RecallColorScheme copyWith({
     Color? background,
     Color? surface,
     Color? onSurface,
@@ -62,8 +66,9 @@ class GlobeColorScheme extends ThemeExtension<GlobeColorScheme> {
     Color? error,
     Color? onError,
     Color? outline,
+    Color? accent,
   }) {
-    return GlobeColorScheme(
+    return RecallColorScheme(
       background: background ?? this.background,
       surface: surface ?? this.surface,
       onSurface: onSurface ?? this.onSurface,
@@ -74,13 +79,14 @@ class GlobeColorScheme extends ThemeExtension<GlobeColorScheme> {
       error: error ?? this.error,
       onError: onError ?? this.onError,
       outline: outline ?? this.outline,
+      accent: accent ?? this.accent,
     );
   }
 
   @override
-  GlobeColorScheme lerp(covariant GlobeColorScheme? other, double t) {
-    if (other is! GlobeColorScheme) return this;
-    return GlobeColorScheme(
+  RecallColorScheme lerp(covariant RecallColorScheme? other, double t) {
+    if (other is! RecallColorScheme) return this;
+    return RecallColorScheme(
       background: Color.lerp(background, other.background, t)!,
       surface: Color.lerp(surface, other.surface, t)!,
       onSurface: Color.lerp(onSurface, other.onSurface, t)!,
@@ -91,10 +97,7 @@ class GlobeColorScheme extends ThemeExtension<GlobeColorScheme> {
       error: Color.lerp(error, other.error, t)!,
       onError: Color.lerp(onError, other.onError, t)!,
       outline: Color.lerp(outline, other.outline, t)!,
+      accent: Color.lerp(accent, other.accent, t)!,
     );
   }
-}
-
-extension DesignDimension on double {
-  double toDesignHeight(double fontSize) => this / fontSize;
 }

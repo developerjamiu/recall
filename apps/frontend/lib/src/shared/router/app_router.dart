@@ -12,15 +12,29 @@ class AppRouter {
       initialLocation: '/',
       refreshListenable: _AuthNotifier(ref),
       routes: [
-        GoRoute(path: '/', builder: (context, state) => const LandingPage()),
+        GoRoute(
+          path: '/',
+          pageBuilder: (context, state) =>
+              const NoTransitionPage(child: LandingPage()),
+        ),
         GoRoute(
           path: '/notes',
-          builder: (context, state) => const NotePage(),
+          pageBuilder: (context, state) =>
+              const NoTransitionPage(child: NotePage()),
           routes: [
             GoRoute(
               path: 'edit',
-              builder: (context, state) {
-                return const MobileNoteEditorPage();
+              pageBuilder: (context, state) => const MaterialPage(
+                child: MobileNoteEditorPage(),
+              ),
+            ),
+            GoRoute(
+              path: ':id',
+              pageBuilder: (context, state) {
+                final noteId = state.pathParameters['id']!;
+                return NoTransitionPage(
+                  child: NotePage(initialNoteId: noteId),
+                );
               },
             ),
           ],

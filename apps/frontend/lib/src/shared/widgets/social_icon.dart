@@ -10,7 +10,7 @@ class SocialIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = GlobeTheme.of(context).colorScheme;
+    final colorScheme = RecallTheme.of(context).colorScheme;
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),

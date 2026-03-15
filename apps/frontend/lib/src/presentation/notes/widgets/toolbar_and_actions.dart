@@ -10,7 +10,7 @@ class ToolBarAndActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = GlobeTheme.of(context).colorScheme;
+    final colorScheme = RecallTheme.of(context).colorScheme;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -121,7 +121,7 @@ class VerticalDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = GlobeTheme.of(context).colorScheme;
+    final colorScheme = RecallTheme.of(context).colorScheme;
 
     return Container(
       width: 1,

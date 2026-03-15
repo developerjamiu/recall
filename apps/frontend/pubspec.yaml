@@ -1,5 +1,5 @@
 name: frontend
-description: "Frontend for the Globe DB showcase app."
+description: "Frontend for the Recall notes app - a Dart on the Server showcase."
 publish_to: "none"
 
 version: 1.0.0+1
@@ -14,9 +14,11 @@ dependencies:
   dart_mappable: ^4.6.0
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   flutter_web_plugins:
     sdk: flutter
-  google_fonts: ^6.2.1
+
   flutter_svg: ^2.0.10+1
   flutter_riverpod: ^3.0.0
   riverpod: ^3.0.0
@@ -39,3 +41,19 @@ flutter:
 
   assets:
     - assets/icons/
+
+  fonts:
+    - family: Satoshi
+      fonts:
+        - asset: assets/fonts/Satoshi-Light.otf
+          weight: 300
+        - asset: assets/fonts/Satoshi-Regular.otf
+          weight: 400
+        - asset: assets/fonts/Satoshi-Medium.otf
+          weight: 500
+        - asset: assets/fonts/Satoshi-Bold.otf
+          weight: 700
+        - asset: assets/fonts/Satoshi-Black.otf
+          weight: 900
+        - asset: assets/fonts/Satoshi-Italic.otf
+          style: italic

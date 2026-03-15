@@ -19,7 +19,7 @@ class ToolBarButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = GlobeTheme.of(context).colorScheme;
+    final colorScheme = RecallTheme.of(context).colorScheme;
 
     return GestureDetector(
       onTap: isEnabled ? onPressed : null,
@@ -54,7 +54,7 @@ class HeaderToolBarButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = GlobeTheme.of(context).colorScheme;
+    final colorScheme = RecallTheme.of(context).colorScheme;
 
     return Container(
       width: 32,

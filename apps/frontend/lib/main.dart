@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/src/shared/theme/theme_data.dart';
@@ -22,13 +24,20 @@ class RecallApp extends ConsumerWidget {
     return MaterialApp.router(
       title: 'Recall',
       theme: ThemeData.light().copyWith(
-        extensions: <ThemeExtension>[GlobeTheme.light()],
+        extensions: <ThemeExtension>[RecallTheme.light()],
       ),
       darkTheme: ThemeData.dark().copyWith(
-        extensions: <ThemeExtension>[GlobeTheme.dark()],
+        extensions: <ThemeExtension>[RecallTheme.dark()],
       ),
       themeMode: themeMode,
       debugShowCheckedModeBanner: false,
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        FlutterQuillLocalizations.delegate,
+      ],
+      supportedLocales: const [Locale('en')],
       routerConfig: router,
     );
   }
