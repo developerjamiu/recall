@@ -1,0 +1,23 @@
+name: shelf_backend
+description: Recall API — Shelf backend with Jao ORM and PostgreSQL.
+version: 1.0.0+1
+publish_to: none
+
+environment:
+  sdk: ^3.9.2
+
+resolution: workspace
+
+dependencies:
+  common:
+  crypto: ^3.0.6
+  http: ^1.5.0
+  jao: ^0.3.0
+  recall_data:
+  shelf: ^1.4.2
+  shelf_cors_headers: ^0.1.5
+  shelf_router: ^1.1.4
+
+dev_dependencies:
+  test: ^1.25.5
+  very_good_analysis: ^5.1.0
