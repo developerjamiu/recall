@@ -1,10 +1,10 @@
 # Privacy Policy
 
-**Last Updated: September 2025**
+**Last Updated: March 2026**
 
 ## 1. Introduction
 
-Invertase ("we," "our," or "us") operates the Recall application and services (the "Service"). This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our Service.
+Developer Jamiu ("we," "our," or "us") operates the Recall application and services (the "Service"). This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our Service.
 
 By using our Service, you agree to the collection and use of information in accordance with this Privacy Policy.
 
@@ -185,22 +185,9 @@ Your continued use of the Service after such changes constitutes acceptance of t
 
 If you have any questions about this Privacy Policy or our data practices, please contact us at:
 
-**Data Protection Officer:**
-- Email: [contact@globe.dev](mailto:contact@globe.dev)
-- General Contact: [contact@globe.dev](mailto:contact@globe.dev)
-- Website: [https://globe.dev](https://globe.dev)
-- GitHub: [https://github.com/invertase](https://github.com/invertase)
-- LinkedIn: [https://www.linkedin.com/company/invertase](https://www.linkedin.com/company/invertase)
-- Discord: [https://invertase.link/globe-discord](https://invertase.link/globe-discord)
-- X (Twitter): [https://x.com/dart_globe](https://x.com/dart_globe)
-
-**Mailing Address:**
-Invertase
-Banks Sheridan
-Datum House
-Electra Way
-Crewe, Cheshire
-England, CW1 6ZF
+**Contact:**
+- Email: [developerjamiu@gmail.com](mailto:developerjamiu@gmail.com)
+- GitHub: [https://github.com/developerjamiu](https://github.com/developerjamiu)
 
 ## 14. Your Privacy Rights
 
@@ -211,11 +198,11 @@ You have the right to:
 - Object to certain processing of your information
 - Request data portability
 
-To exercise these rights, please contact us at [contact@globe.dev](mailto:contact@globe.dev).
+To exercise these rights, please contact us at [developerjamiu@gmail.com](mailto:developerjamiu@gmail.com).
 
 ---
 
-**Effective Date:** September 2025  
+**Effective Date:** March 2026  
 **Version:** 1.0
 
 This Privacy Policy is effective as of the date listed above and will remain in effect except with respect to any changes in its provisions in the future, which will be in effect immediately after being posted on this page.

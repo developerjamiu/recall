@@ -1,248 +1,220 @@
 # Recall
 
-A full-stack Dart & Flutter notes application built on Globe, showcasing authentication, database, and AI features (coming soon!).
+A full-stack **Dart on the Server** showcase — a notes application demonstrating production-grade Dart backend development with dual server implementations, PostgreSQL, OAuth 2.0 with refresh token rotation, and a Flutter Web frontend.
 
-## 🎯 Project Purpose
+## Project Purpose
 
-Recall serves multiple purposes:
+Recall exists to demonstrate that Dart is a viable, productive choice for full-stack web development:
 
-- **Globe Platform Showcase**: Demonstrates Globe DB, Globe Platform (hosting), and various Globe features
-- **Educational Resource**: Teaches Dart and Flutter developers about full-stack Dart development
-- **Reference Implementation**: Provides a working example of a complete platform with backend and frontend
+- **Dual Backend Comparison**: Side-by-side [Dart Frog](https://dartfrog.vgv.dev/) and [Shelf](https://pub.dev/packages/shelf) implementations sharing the same data layer
+- **Production Patterns**: JWT auth with refresh token rotation, rate limiting, abstract repository pattern, proper input validation
+- **Educational Resource**: Companion project for Dart backend workshops, conference talks, and written guides
 
-## 🌐 Live Demo
-
-- **Frontend**: [https://recall.globeapp.dev](https://recall.globeapp.dev)
-- **Backend API**: [https://recall-api.globeapp.dev](https://recall-api.globeapp.dev)
-
-## 🏗️ Architecture
-
-This is a monorepo containing three main components:
+## Architecture
 
 ```
 recall/
 ├── apps/
-│   ├── backend/          # Dart Frog API server
-│   └── frontend/         # Flutter web application
-└── packages/
-    └── common/           # Shared models and DTOs
+│   ├── backend/            # Dart Frog API server (port 8080)
+│   ├── shelf_backend/      # Shelf API server (port 8081)
+│   └── frontend/           # Flutter Web application
+├── packages/
+│   ├── common/             # Shared models and DTOs
+│   └── recall_data/        # Abstract repository interfaces
+└── docker-compose.yml      # PostgreSQL for local development
 ```
+
+Both backends expose identical REST APIs and share the same abstract repository interfaces from `recall_data`, making it easy to compare the two frameworks.
 
 ### Tech Stack
 
-**Backend:**
-- [Dart Frog](https://dartfrog.vgv.dev/) - Web framework for Dart
-- [Drift](https://drift.simonbinder.eu/) - Type-safe ORM for database operations
-- [Globe DB](https://globe.dev) - Cloud database (SQLite for local development)
-- OAuth 2.0 authentication (Google & GitHub)
+**Backends (Dart Frog & Shelf):**
+- [Jao ORM](https://pub.dev/packages/jao) — Django-inspired ORM for Dart
+- [PostgreSQL 16](https://www.postgresql.org/) — Production database
+- OAuth 2.0 (Google & GitHub) with refresh token rotation
+- JWT authentication (15-min access tokens, 7-day refresh tokens)
+- Rate limiting on auth endpoints (10 req/min per IP)
 
 **Frontend:**
-- [Flutter](https://flutter.dev/) - UI framework
-- [Riverpod](https://riverpod.dev/) - State management
-- [Go Router](https://pub.dev/packages/go_router) - Navigation
-- [Flutter Quill](https://pub.dev/packages/flutter_quill) - Rich text editor
+- [Flutter](https://flutter.dev/) for Web
+- [Riverpod 3](https://riverpod.dev/) — State management
+- [Go Router](https://pub.dev/packages/go_router) — Navigation with deep linking (`/notes/:id`)
+- [Flutter Quill](https://pub.dev/packages/flutter_quill) — Rich text editor with auto-save
 
-**Shared:**
-- [Dart Mappable](https://pub.dev/packages/dart_mappable) - Code generation
-- [Luthor](https://pub.dev/packages/luthor) - Schema validation
+**Shared Packages:**
+- [Dart Mappable](https://pub.dev/packages/dart_mappable) — Serialization code generation
+- [Luthor](https://pub.dev/packages/luthor) — Schema validation
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
 - [Dart SDK](https://dart.dev/get-dart) ^3.9.0
 - [Flutter SDK](https://flutter.dev/docs/get-started/install) ^3.9.0
-- [Git](https://git-scm.com/)
+- [Docker](https://docs.docker.com/get-docker/) (for PostgreSQL)
 
-### 1. Clone the Repository
+### 1. Clone and Install
 
 ```bash
-git clone https://github.com/invertase/recall.git
+git clone https://github.com/developerjamiu/recall.git
 cd recall
+dart pub get   # Pub workspaces resolves all packages
 ```
 
-### 2. Install Dependencies
+### 2. Start PostgreSQL
 
 ```bash
-# Install dependencies for each package individually
-# Backend dependencies
-cd apps/backend
-dart pub get
-
-# Frontend dependencies  
-cd ../frontend
-flutter pub get
-
-# Common package dependencies
-cd ../../packages/common
-dart pub get
-
-# Return to root
-cd ../..
+docker compose up -d
 ```
+
+This starts PostgreSQL 16 on port 5432 with database `recall_dev`.
 
 ### 3. Set Up OAuth Applications
 
-Before setting up environment variables, you need to configure OAuth applications with GitHub and Google.
+#### GitHub OAuth
 
-#### GitHub OAuth Setup
+1. Go to [GitHub Developer Settings](https://github.com/settings/developers) > **OAuth Apps** > **New OAuth App**
+2. Set **Authorization callback URL** to `http://localhost:8080/auth/github/callback`
+3. Copy your **Client ID** and **Client Secret**
 
-1. Go to [GitHub Developer Settings](https://github.com/settings/developers)
-2. Click **OAuth Apps** → **New OAuth App**
-3. Fill out the form:
-   - **Application name**: Recall App
-   - **Homepage URL**: `http://localhost:8080`
-   - **Authorization callback URL**: `http://localhost:8080/auth/github/callback`
-4. Click **Register application**
-5. Copy your **Client ID** and generate a **Client Secret**
+#### Google OAuth
 
-#### Google OAuth Setup
+1. Go to [Google Cloud Console](https://console.cloud.google.com/) > **APIs & Services** > **Credentials**
+2. Create an **OAuth client ID** (Web application)
+3. Add **Authorized redirect URI**: `http://localhost:8080/auth/google/callback`
+4. Copy your **Client ID** and **Client Secret**
 
-1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Create a new project or select existing one
-3. Navigate to **APIs & Services** → **Credentials**
-4. Click **+ CREATE CREDENTIALS** → **OAuth client ID**
-5. Configure the OAuth consent screen if prompted
-6. Select **Web application** as the application type
-7. Add **Authorized redirect URI**: `http://localhost:8080/auth/google/callback`
-8. Click **CREATE** and copy your **Client ID** and **Client Secret**
+### 4. Configure Environment
 
-### 4. Set Up Environment Variables
+Copy and fill in the env files for your chosen backend:
 
-Create a `.env` file in the `apps/backend/` directory:
+```bash
+cp apps/backend/env.example apps/backend/.env
+# or
+cp apps/shelf_backend/env.example apps/shelf_backend/.env
+```
 
 ```env
-# Server Configuration
 BASE_URL=http://localhost:8080
 CLIENT_URL=http://localhost:3000
-
-# OAuth Configuration
 GITHUB_CLIENT_ID=your_github_client_id
 GITHUB_CLIENT_SECRET=your_github_client_secret
 GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
-
-# JWT Configuration
 JWT_SECRET=your_jwt_secret_key
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
+DATABASE_NAME=recall_dev
+DATABASE_USER=recall
+DATABASE_PASSWORD=recall
 ```
 
-### 5. Run the Backend
+### 5. Run Migrations
 
+```bash
+cd apps/backend   # or apps/shelf_backend
+dart run build_runner build   # Generate Jao model code
+dart run bin/migrate.dart     # Create database tables
+```
+
+### 6. Run the Backend
+
+**Dart Frog** (port 8080):
 ```bash
 cd apps/backend
 dart_frog dev
 ```
 
-The API will be available at `http://localhost:8080`
+**Shelf** (port 8081):
+```bash
+cd apps/shelf_backend
+dart run bin/server.dart
+```
 
-### 6. Run the Frontend
+### 7. Run the Frontend
 
 ```bash
 cd apps/frontend
 flutter run -d web-server --web-port 3000
 ```
 
-The app will be available at `http://localhost:3000`
+## API Endpoints
 
-## 📚 Documentation
+Both backends expose identical routes:
 
-- [Backend Documentation](./apps/backend/README.md)
-- [Frontend Documentation](./apps/frontend/README.md)
-- [Common Package Documentation](./packages/common/README.md)
+| Method | Path | Auth | Description |
+|--------|------|------|-------------|
+| `GET` | `/` | No | Health check |
+| `GET` | `/auth/google` | No | Get Google OAuth URL |
+| `GET` | `/auth/google/callback` | No | Google OAuth callback |
+| `GET` | `/auth/github` | No | Get GitHub OAuth URL |
+| `GET` | `/auth/github/callback` | No | GitHub OAuth callback |
+| `POST` | `/auth/refresh` | No | Refresh access token |
+| `POST` | `/auth/logout` | No | Revoke refresh token |
+| `GET` | `/api/me` | Yes | Get current user |
+| `GET` | `/api/notes` | Yes | List all notes |
+| `POST` | `/api/notes` | Yes | Create a note |
+| `GET` | `/api/notes/:id` | Yes | Get a note |
+| `PATCH` | `/api/notes/:id` | Yes | Update a note |
+| `DELETE` | `/api/notes/:id` | Yes | Delete a note |
 
-## 🧪 Testing
+## Features
 
-### Backend Tests
+- **OAuth 2.0 Authentication** with Google and GitHub providers
+- **Refresh Token Rotation** — short-lived access tokens (15 min) with automatic refresh
+- **Rate Limiting** on auth endpoints (10 requests/min per IP)
+- **Rich Text Editor** with toolbar, formatting, and auto-expanding height
+- **Auto-Save** with 2-second debounce and visual status indicator
+- **Deep Linking** — navigate directly to `/notes/:id`
+- **Keyboard Shortcuts** — `Ctrl/Cmd+N` new note, `Ctrl/Cmd+S` save, `Esc` deselect
+- **Skeleton Loaders** for loading states
+- **Error States** with retry buttons
+- **Dark/Light Theme** toggle
+- **Responsive Design** — desktop and mobile layouts
+
+## Testing
 
 ```bash
-cd apps/backend
-dart test
+# Backend tests
+cd apps/backend && dart test
+
+# Frontend tests
+cd apps/frontend && flutter test
+
+# Common package tests
+cd packages/common && dart test
 ```
 
-### Frontend Tests
+## Educational Resources
 
-```bash
-cd apps/frontend
-flutter test
-```
+This project is a companion to various Dart backend educational materials:
 
-### Common Package Tests
+- [Dart Backend Handbook](https://github.com/developerjamiu/dart-backend-handbook) — Comprehensive guide to building backends with Dart
+- [Articles on Medium](https://medium.com/@developerjamiu) and [Hashnode](https://developerjamiu.hashnode.dev/)
+- Conference talks and workshops at [FlutterBytes Conference](https://www.flutterbytesconf.com/) and other events
 
-```bash
-cd packages/common
-dart test
-```
+## Documentation
 
-## 🚀 Deployment
+- [Backend (Dart Frog)](./apps/backend/README.md)
+- [Backend (Shelf)](./apps/shelf_backend/README.md)
+- [Frontend](./apps/frontend/README.md)
+- [Common Package](./packages/common/README.md)
+- [Data Layer](./packages/recall_data/README.md)
 
-### Backend (Globe Platform)
-
-The backend is deployed on Globe Platform at `https://recall-api.globeapp.dev`
-
-### Frontend (Globe Platform)
-
-The frontend is deployed on Globe Platform at `https://recall.globeapp.dev`
-
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions! Please see our [Contributing Guidelines](./CONTRIBUTING.md) for details.
 
-### Development Workflow
+## License
 
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Make your changes
-4. Run tests: `dart test`
-5. Commit your changes: `git commit -m 'Add amazing feature'`
-6. Push to the branch: `git push origin feature/amazing-feature`
-7. Open a Pull Request
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
 
-## 📋 Features
+## Acknowledgments
 
-### ✅ Implemented
-
-- **Authentication**: OAuth 2.0 with Google and GitHub
-- **Notes Management**: Create, read, update, delete notes
-- **Rich Text Editor**: Powered by Flutter Quill
-- **Responsive Design**: Works on desktop and mobile
-- **Dark/Light Theme**: Theme switching support
-- **Cross-Device Sync**: Notes sync across devices via API
-- **User Management**: Profile management with OAuth providers
-
-### 🚧 Coming Soon
-
-- **AI Features**: AI-powered note assistance
-- **Collaboration**: Share notes with other users
-- **Export/Import**: Export notes in various formats
-- **Search**: Full-text search across notes
-- **Categories**: Organize notes with tags and categories
-
-## 🏛️ Globe Platform Features Showcased
-
-- **Globe DB**: Cloud database with local SQLite development
-- **Globe Platform**: Seamless deployment and hosting
-- **Authentication**: OAuth integration
-- **API Management**: RESTful API with Dart Frog
-- **API Integration**: RESTful API for data synchronization
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- Built with [Globe](https://globe.dev) platform
-- Powered by [Dart Frog](https://dartfrog.vgv.dev/)
-- UI components from [Flutter](https://flutter.dev/)
-- Database powered by [Globe DB](https://globe.dev)
-
-## 📞 Support
-
-- **Documentation**: [Globe Docs](https://docs.globe.dev)
-- **Community**: [Globe Discord](https://invertase.link/globe-discord)
-- **Issues**: [GitHub Issues](https://github.com/invertase/recall/issues)
-- **Email**: [contact@globe.dev](mailto:contact@globe.dev)
+- Backend frameworks: [Dart Frog](https://dartfrog.vgv.dev/) and [Shelf](https://pub.dev/packages/shelf)
+- ORM: [Jao](https://pub.dev/packages/jao) by [Daniil Shumko](https://github.com/WiseVladlen)
+- UI: [Flutter](https://flutter.dev/)
 
 ---
 
-**Recall** - Built with ❤️ by the Globe team
+**Recall** — Built by [Developer Jamiu](https://github.com/developerjamiu)

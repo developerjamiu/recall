@@ -6,9 +6,9 @@ Thank you for your interest in contributing to Recall! This document provides gu
 
 Recall serves as:
 
-- **Globe Platform Showcase**: Demonstrates Globe DB, hosting, and other Globe features
+- **Dart on the Server Showcase**: Demonstrates full-stack Dart development with multiple backend implementations
 - **Educational Resource**: Teaches full-stack Dart development
-- **Reference Implementation**: Provides a working example of a complete platform
+- **Reference Implementation**: Provides a working example of a complete full-stack Dart application
 
 ## 🚀 Getting Started
 
@@ -29,21 +29,8 @@ Recall serves as:
 
 2. **Install Dependencies**
    ```bash
-   # Install dependencies for each package individually
-   # Backend dependencies
-   cd apps/backend
+   # Install all dependencies at once (pub workspaces resolves all packages)
    dart pub get
-   
-   # Frontend dependencies  
-   cd ../frontend
-   flutter pub get
-   
-   # Common package dependencies
-   cd ../../packages/common
-   dart pub get
-   
-   # Return to root
-   cd ../..
    ```
 
 3. **Set Up Environment**
@@ -149,13 +136,13 @@ docs(readme): update setup instructions
 ### Dart/Flutter Standards
 
 - Follow [Dart Style Guide](https://dart.dev/guides/language/effective-dart/style)
-- Use [Very Good Analysis](https://pub.dev/packages/very_good_analysis) for linting
+- Use [Very Good Analysis](https://pub.dev/packages/very_good_analysis) (backends) or [lints](https://pub.dev/packages/lints) (frontend/packages) for static analysis
 - Maintain test coverage above 80%
 - Write meaningful commit messages
 
 ### Backend Standards
 
-- Use [Dart Frog](https://dartfrog.vgv.dev/) best practices
+- Use [Dart Frog](https://dartfrog.vgv.dev/) or [Shelf](https://pub.dev/packages/shelf) best practices
 - Follow RESTful API design principles
 - Implement proper error handling
 - Add comprehensive tests
@@ -291,13 +278,13 @@ Any other relevant information
 ### Security Guidelines
 
 - **Never commit secrets**: Use environment variables
-- **Report vulnerabilities**: Email security@globe.dev
+- **Report vulnerabilities**: Email developerjamiu@gmail.com
 - **Follow OWASP guidelines**: For web security
 - **Validate inputs**: Always validate user inputs
 
 ### Reporting Security Issues
 
-For security vulnerabilities, please email security@globe.dev instead of creating a public issue.
+For security vulnerabilities, please email developerjamiu@gmail.com instead of creating a public issue.
 
 ## 🏷️ Release Process
 
@@ -328,9 +315,8 @@ We follow [Semantic Versioning](https://semver.org/):
 ### Getting Help
 
 - **Documentation**: Check README files first
-- **Discord**: Join [Globe Discord](https://invertase.link/globe-discord)
 - **Issues**: Create GitHub issues for bugs/features
-- **Email**: Contact [contact@globe.dev](mailto:contact@globe.dev)
+- **Email**: Contact [developerjamiu@gmail.com](mailto:developerjamiu@gmail.com)
 
 ## 📋 Issue Labels
 
@@ -358,8 +344,7 @@ By contributing to Recall, you agree that your contributions will be licensed un
 
 ## 📞 Contact
 
-- **Email**: [contact@globe.dev](mailto:contact@globe.dev)
-- **Discord**: [Globe Discord](https://invertase.link/globe-discord)
-- **GitHub**: [@invertase](https://github.com/invertase)
+- **Email**: [developerjamiu@gmail.com](mailto:developerjamiu@gmail.com)
+- **GitHub**: [@developerjamiu](https://github.com/developerjamiu)
 
 Thank you for contributing to Recall! 🚀
