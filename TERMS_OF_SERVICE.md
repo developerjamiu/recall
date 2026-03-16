@@ -1,10 +1,10 @@
 # Terms of Service
 
-**Last Updated: September 2025**
+**Last Updated: March 2026**
 
 ## 1. Acceptance of Terms
 
-Welcome to Recall ("we," "our," or "us"). These Terms of Service ("Terms") govern your use of the Recall application and services (collectively, the "Service") operated by Invertase. By accessing or using our Service, you agree to be bound by these Terms.
+Welcome to Recall ("we," "our," or "us"). These Terms of Service ("Terms") govern your use of the Recall application and services (collectively, the "Service") operated by Developer Jamiu. By accessing or using our Service, you agree to be bound by these Terms.
 
 If you disagree with any part of these terms, then you may not access the Service.
 
@@ -16,7 +16,6 @@ Recall is a full-stack notes application built with Dart and Flutter that allows
 - Authenticate using Google or GitHub OAuth
 - Store notes securely in the cloud
 - Access notes across multiple devices
-- Use AI-powered features (coming soon)
 
 ## 3. User Accounts and Authentication
 
@@ -59,7 +58,7 @@ Your privacy is important to us. Our collection and use of personal information 
 ## 6. Intellectual Property Rights
 
 ### 6.1 Our Rights
-- The Service and its original content, features, and functionality are owned by Invertase and are protected by international copyright, trademark, patent, trade secret, and other intellectual property laws
+- The Service and its original content, features, and functionality are owned by Developer Jamiu and are protected by international copyright, trademark, patent, trade secret, and other intellectual property laws
 
 ### 6.2 Your Rights
 - You retain ownership of your User Content
@@ -85,7 +84,7 @@ TO THE MAXIMUM EXTENT PERMITTED BY LAW, WE SHALL NOT BE LIABLE FOR ANY INDIRECT,
 
 ## 9. Indemnification
 
-You agree to defend, indemnify, and hold harmless Invertase and its officers, directors, employees, and agents from and against any claims, damages, obligations, losses, liabilities, costs, or debt, and expenses (including attorney's fees) resulting from or arising out of your use of the Service or violation of these Terms.
+You agree to defend, indemnify, and hold harmless Developer Jamiu and its officers, directors, employees, and agents from and against any claims, damages, obligations, losses, liabilities, costs, or debt, and expenses (including attorney's fees) resulting from or arising out of your use of the Service or violation of these Terms.
 
 ## 10. Governing Law and Dispute Resolution
 
@@ -108,12 +107,8 @@ Your continued use of the Service after such modifications constitutes acceptanc
 
 If you have any questions about these Terms of Service, please contact us at:
 
-- Email: [contact@globe.dev](mailto:contact@globe.dev)
-- Website: [https://globe.dev](https://globe.dev)
-- GitHub: [https://github.com/invertase](https://github.com/invertase)
-- LinkedIn: [https://www.linkedin.com/company/invertase](https://www.linkedin.com/company/invertase)
-- Discord: [https://invertase.link/globe-discord](https://invertase.link/globe-discord)
-- X (Twitter): [https://x.com/dart_globe](https://x.com/dart_globe)
+- Email: [developerjamiu@gmail.com](mailto:developerjamiu@gmail.com)
+- GitHub: [https://github.com/developerjamiu](https://github.com/developerjamiu)
 
 ## 13. Severability
 
@@ -121,9 +116,9 @@ If any provision of these Terms is held to be invalid or unenforceable, the rema
 
 ## 14. Entire Agreement
 
-These Terms, together with our Privacy Policy, constitute the entire agreement between you and Invertase regarding the use of the Service and supersede all prior agreements and understandings.
+These Terms, together with our Privacy Policy, constitute the entire agreement between you and Developer Jamiu regarding the use of the Service and supersede all prior agreements and understandings.
 
 ---
 
-**Effective Date:** September 2025  
+**Effective Date:** March 2026
 **Version:** 1.0
