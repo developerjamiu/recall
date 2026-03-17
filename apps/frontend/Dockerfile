@@ -31,10 +31,23 @@ COPY --from=builder /app/apps/frontend/build/web /usr/share/nginx/html
 
 # Handle Flutter's client-side routing — all paths serve index.html
 # Listen on 8080 to match Railway's expected PORT
-RUN printf 'server {\n\
+# Gzip compresses main.dart.js from ~4.5 MB to ~1.2 MB for faster first load
+RUN printf 'gzip on;\n\
+gzip_types text/plain text/css application/javascript application/json image/svg+xml;\n\
+gzip_min_length 1024;\n\
+\n\
+server {\n\
     listen 8080;\n\
     root /usr/share/nginx/html;\n\
     index index.html;\n\
+\n\
+    # Cache static assets aggressively; Flutter fingerprints filenames on rebuild\n\
+    location ~* \\.(?:js|css|wasm|otf|ttf|woff2?|png|svg|ico)$ {\n\
+        expires 1y;\n\
+        add_header Cache-Control "public, immutable";\n\
+        try_files $uri =404;\n\
+    }\n\
+\n\
     location / {\n\
         try_files $uri $uri/ /index.html;\n\
     }\n\
