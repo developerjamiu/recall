@@ -142,12 +142,7 @@
       }
     }
 
-    // Hide once the app signals it's ready (auth resolved, first page rendered).
-    // Falls back to flutter-first-frame if the app never dispatches 'app-ready'.
-    window.addEventListener('app-ready', hideLoadingScreen);
-    window.addEventListener('flutter-first-frame', function() {
-      setTimeout(hideLoadingScreen, 3000);
-    });
+    window.addEventListener('flutter-first-frame', hideLoadingScreen);
     setTimeout(hideLoadingScreen, 10000);
   </script>
 </body>

@@ -29,7 +29,6 @@ dependencies:
   go_router: ^14.2.7
   flutter_launcher_icons: ^0.14.4
   timeago: ^3.7.1
-  web: ^1.1.1
 
 dev_dependencies:
   flutter_test:

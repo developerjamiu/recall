@@ -1,5 +1,3 @@
-import 'dart:js_interop';
-
 import 'package:flutter/material.dart';
 import 'package:frontend/src/presentation/landing/pages/landing_page.dart';
 import 'package:frontend/src/presentation/notes/pages/mobile_note_editor_page.dart';
@@ -7,7 +5,6 @@ import 'package:frontend/src/presentation/notes/pages/note_page.dart';
 import 'package:frontend/src/providers/auth_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:web/web.dart' as web;
 
 class AppRouter {
   static GoRouter createRouter(WidgetRef ref) {
@@ -47,9 +44,6 @@ class AppRouter {
         final authState = ref.watch(authStateProvider);
 
         if (authState.isLoading) return null;
-
-        // Auth resolved — signal the HTML loading screen to hide.
-        web.window.dispatchEvent(web.CustomEvent('app-ready'));
 
         final isAuthenticated = authState.value != null;
         final isOnLanding = state.uri.path == '/';
